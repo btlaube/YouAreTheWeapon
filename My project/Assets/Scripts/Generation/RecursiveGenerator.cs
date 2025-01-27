@@ -93,9 +93,8 @@ public class RecursiveGenerator : MonoBehaviour
                 }
             }
         }
-
         return false; // Return false if no valid room placement is found
-    }
+    }    
 
     private void GenAgain()
     {
@@ -126,7 +125,7 @@ public class RecursiveGenerator : MonoBehaviour
             }
 
             
-            Debug.Log(room);
+            // Debug.Log(room);
         }
     }
 

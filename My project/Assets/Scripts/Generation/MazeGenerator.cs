@@ -31,6 +31,9 @@ public class MazeGenerator : MonoBehaviour
     public Tilemap wallTilemap;
     public Tilemap pathTilemap;
 
+    [Header("Room Stuff")]
+    public GameObject lightPrefab;
+
     void Awake()
     {
         // wallTilemap = GetComponent<Tilemap>();
@@ -41,6 +44,7 @@ public class MazeGenerator : MonoBehaviour
         DrawExpandedGrid(mazeEntry, mazeExit);
         GenerateExpandedMaze();
         StartCoroutine(PauseForShadows());
+        SpawnLights();
     }
 
     public IEnumerator PauseForShadows()
@@ -84,9 +88,66 @@ public class MazeGenerator : MonoBehaviour
                 }
             }
         }
+
         CreateEntryAndExit(mazeEntry, mazeExit);
         // CreateShadowCasters();
         // AddExitWallsToRoom(mazeEntry, mazeExit);
+    }
+
+    private void SpawnLights()
+    {
+        int expandedRows = rows * 3 + (rows + 1); // 3x3 paths + 1x1 walls
+        int expandedCols = cols * 3 + (cols + 1); // 3x3 paths + 1x1 walls
+        for (int x = 0; x < expandedCols - 1; x++) // -1 from expandedCols here removes last wall for uneven room size at right side of maze
+        {
+            for (int y = 0; y < expandedRows; y++)
+            {
+                // Check if the current cell is the center of a room
+                if (x % 4 == 2 && y % 4 == 2)
+                {
+                    Debug.Log($"Room Center at: ({x},{y})");
+                    // Check if this is a dead end
+                    Vector2Int cell = new Vector2Int(x, y);
+                    if (IsDeadEnd(cell)) // No lights on maze edge.
+                    {
+                        SpawnLight(cell); // Spawn light at dead end
+                    }
+                }
+            }
+        }
+    }
+
+    // Spawn lights helper functions
+    bool IsDeadEnd(Vector2Int cell)
+    {
+        int accessibleNeighbors = 0;
+        foreach (Vector2Int direction in new Vector2Int[] {
+            new Vector2Int(0, 4),   // Up
+            new Vector2Int(0, -4),  // Down
+            new Vector2Int(-4, 0),  // Left
+            new Vector2Int(4, 0)    // Right
+        })
+        {
+            Vector2Int neighbor = cell + direction;
+            if (IsPathBetween(cell, neighbor))
+            {
+                accessibleNeighbors++;
+            }
+        }
+        return accessibleNeighbors == 1; // Dead end if only one accessible neighbor
+    }
+
+    // Check if the wall tile between current and neighbor is removed
+    bool IsPathBetween(Vector2Int current, Vector2Int neighbor)
+    {
+        // Center positions of the current and neighbor cells in the expanded grid
+        // Vector2Int currentCenter = new Vector2Int(current.x * 4 + 2, current.y * 4 + 2);
+        // Vector2Int neighborCenter = new Vector2Int(neighbor.x * 4 + 2, neighbor.y * 4 + 2);
+
+        // Wall midpoint position
+        Vector2Int wallPosition = (current + neighbor) / 2;
+        
+        return pathTilemap.GetTile(new Vector3Int(wallPosition.x, wallPosition.y, 0)) == pathTile;
     }
 
     private void CreateShadowCasters()
@@ -98,7 +159,7 @@ public class MazeGenerator : MonoBehaviour
 
     private void CreateEntryAndExit(Vector2Int mazeEntry, Vector2Int mazeExit)
     {
-        Debug.Log($"Creating entry: {mazeEntry} and exit: {mazeExit}");
+        // Debug.Log($"Creating entry: {mazeEntry} and exit: {mazeExit}");
         // Determine which walls, ceiling, and floor should have tiles
         bool hasLeftEntry = mazeEntry == new Vector2Int(-1, 0);
         // bool hasRightEntry = mazeEntry == new Vector2Int(1, 0);  // No right entries
@@ -110,7 +171,7 @@ public class MazeGenerator : MonoBehaviour
         bool hasBottomExit = mazeExit == new Vector2Int(0, -1);
         bool hasTopExit = mazeExit == new Vector2Int(0, 1);
 
-        Debug.Log($"Has hasLeftEntry: {hasLeftEntry} and hasRightExit: {hasRightExit}");
+        // Debug.Log($"Has hasLeftEntry: {hasLeftEntry} and hasRightExit: {hasRightExit}");
 
 
         // Offset to move the tiles to the bottom-left corner
@@ -157,7 +218,7 @@ public class MazeGenerator : MonoBehaviour
 
     private void AddExitWallsToRoom(Vector2Int mazeEntry, Vector2Int mazeExit)
     {
-        Debug.Log($"Creating Exit Wall: {mazeEntry} and exit: {mazeExit}");
+        // Debug.Log($"Creating Exit Wall: {mazeEntry} and exit: {mazeExit}");
         // Determine which walls, ceiling, and floor should have tiles
         bool hasLeftWall = mazeEntry != new Vector2Int(-1, 0) && mazeExit != new Vector2Int(-1, 0);
         bool hasRightWall = mazeEntry != new Vector2Int(1, 0) && mazeExit != new Vector2Int(1, 0);
@@ -225,7 +286,7 @@ public class MazeGenerator : MonoBehaviour
                 // Add the neighbor's edges to the edge list
                 AddEdgesExpanded(neighbor);
             }
-        }
+        }        
     }
 
     void AddEdgesExpanded(Vector2Int cell)
@@ -293,5 +354,21 @@ public class MazeGenerator : MonoBehaviour
         }
     }
 
+    private void SpawnLight(Vector2Int room)
+    {
+        Debug.Log($"Spawning Light at ({room})");
+        // Center position of the room cell in the expanded grid
+        Vector2Int roomCenter = new Vector2Int(room.x * 4 + 2, room.y * 4 + 2);
+        
+        // Offset to move the tiles to the bottom-left corner
+        int offsetX = -roomWidth / 2;
+        int offsetY = -roomHeight / 2;
+
+        // Apply offset to roomCenter
+        roomCenter += new Vector2Int(offsetX, offsetY);
+
+        GameObject lightObject = Instantiate(lightPrefab, new Vector2(roomCenter.x, roomCenter.y), Quaternion.identity, transform);
+        lightObject.transform.localPosition = new Vector2(roomCenter.x, roomCenter.y);
+    }
    
 }

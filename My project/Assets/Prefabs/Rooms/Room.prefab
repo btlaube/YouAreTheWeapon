@@ -8293,6 +8293,7 @@ MonoBehaviour:
   pathTile: {fileID: 11400000, guid: 7230f7f9efbfe854fac3c77ca2294082, type: 2}
   wallTilemap: {fileID: 8171834046260315958}
   pathTilemap: {fileID: 2250154349201999000}
+  lightPrefab: {fileID: 1087137000483822030, guid: 30bd8d98fdc24a742a65718605c0349e, type: 3}
 --- !u!1 &3588483641337640808
 GameObject:
   m_ObjectHideFlags: 0
@@ -8573,7 +8574,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef4b2112aea4a9f429960ef468f56145, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selfShadows: 1
+  selfShadows: 0
 --- !u!1 &7721869212649422484
 GameObject:
   m_ObjectHideFlags: 0
@@ -8657,6 +8658,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Spotlight (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 2726032756510252810, guid: 20d69201b53077d499b48f8adbcb728d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8718,6 +8723,10 @@ PrefabInstance:
     - target: {fileID: 2726032756510252810, guid: 20d69201b53077d499b48f8adbcb728d, type: 3}
       propertyPath: m_Name
       value: Spotlight
+      objectReference: {fileID: 0}
+    - target: {fileID: 2726032756510252810, guid: 20d69201b53077d499b48f8adbcb728d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

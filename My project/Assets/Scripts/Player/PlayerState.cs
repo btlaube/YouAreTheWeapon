@@ -24,18 +24,18 @@ public class IdleState : PlayerState
 
     public override void Enter()
     {
-        Debug.Log("Enter Idle");
+        // Debug.Log("Enter Idle");
         playerController.currentJumps = 0;
     }
 
     public override void Update()
     {
-        Debug.Log("Idle");
+        // Debug.Log("Idle");
     }
 
     public override void Exit()
     {
-        Debug.Log("Exit Idle");
+        // Debug.Log("Exit Idle");
     }
 }
 
@@ -45,18 +45,18 @@ public class RunningState : PlayerState
 
     public override void Enter()
     {
-        Debug.Log("Enter Running");
+        // Debug.Log("Enter Running");
     }
 
     public override void Update()
     {
-        Debug.Log("Running");
+        // Debug.Log("Running");
         playerAnimator.SetFloat("Speed", Mathf.Abs(playerController.rb.velocity.x));
     }
 
     public override void Exit()
     {
-        Debug.Log("Exit Running");
+        // Debug.Log("Exit Running");
     }
 }
 
@@ -67,19 +67,19 @@ public class FallingState : PlayerState
     public override void Enter()
     {
         playerAnimator.SetBool("IsFalling", true);
-        Debug.Log("Enter Falling");
+        // Debug.Log("Enter Falling");
         playerController.rb.gravityScale = playerController.regGravityScale;
     }
 
     public override void Update()
     {
-        Debug.Log("Falling");
+        // Debug.Log("Falling");
     }
 
     public override void Exit()
     {
         playerAnimator.SetBool("IsFalling", false);
-        Debug.Log("Exit Falling");
+        // Debug.Log("Exit Falling");
     }
 }
 
@@ -90,7 +90,7 @@ public class WallClingingState : PlayerState
     public override void Enter()
     {
         playerAnimator.SetBool("IsOnWall", true);
-        Debug.Log("Enter WallClinging");
+        // Debug.Log("Enter WallClinging");
         playerController.rb.gravityScale = playerController.wallClingGravityScale;
         playerController.SetYVelocity(0.0f);
         playerController.currentJumps = 0;
@@ -98,7 +98,7 @@ public class WallClingingState : PlayerState
 
     public override void Update()
     {
-        Debug.Log("WallClinging");
+        // Debug.Log("WallClinging");
 
         // Cancel horixontal input for on wall
         playerController.CancelInputOnWall();
@@ -117,7 +117,7 @@ public class WallClingingState : PlayerState
 
     public override void Exit()
     {
-        Debug.Log("Exit WallClinging");
+        // Debug.Log("Exit WallClinging");
         playerAnimator.SetBool("IsOnWall", false);
     }
 }
@@ -128,20 +128,20 @@ public class JumpingState : PlayerState
 
     public override void Enter()
     {
-        Debug.Log("Enter Jumping");
+        // Debug.Log("Enter Jumping");
         playerAnimator.SetBool("IsJumping", true);
         playerController.Jump();
     }
 
     public override void Update()
     {
-        Debug.Log("Jumping");
+        // Debug.Log("Jumping");
         playerController.JumpUpdate();
     }
 
     public override void Exit()
     {
-        Debug.Log("Exit Jumping");
+        // Debug.Log("Exit Jumping");
         playerAnimator.SetBool("IsJumping", false);
         playerController.EndJump();
     }
@@ -153,20 +153,20 @@ public class WallJumpingState : PlayerState
 
     public override void Enter()
     {
-        Debug.Log("Enter WallJumping");
+        // Debug.Log("Enter WallJumping");
         playerAnimator.SetBool("IsJumping", true);
         playerController.WallJump();
     }
 
     public override void Update()
     {
-        Debug.Log("WallJumping");
+        // Debug.Log("WallJumping");
         playerController.WallJumpUpdate();
     }
 
     public override void Exit()
     {
-        Debug.Log("Exit WallJumping");
+        // Debug.Log("Exit WallJumping");
         playerAnimator.SetBool("IsJumping", false);
         playerController.EndJump();
     }

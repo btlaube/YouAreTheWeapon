@@ -26,7 +26,7 @@ public class ShadowCaster2DCreator : MonoBehaviour
 
 	public void Create()
 	{
-		Debug.Log($"Can confirm creation: {this}");
+		// Debug.Log($"Can confirm creation: {this}");
 		DestroyOldShadowCasters();
 		tilemapCollider = GetComponent<CompositeCollider2D>();
 
@@ -54,7 +54,7 @@ public class ShadowCaster2DCreator : MonoBehaviour
 		// Added: Center shadow casters
 		foreach (Transform shadowCaster in transform)
         {
-			Debug.Log($"Counting off: {shadowCaster}");
+			// Debug.Log($"Counting off: {shadowCaster}");
             shadowCaster.localPosition = Vector2.zero;
         }
 	}

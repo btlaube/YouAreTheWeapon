@@ -8,7 +8,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: FadeEnd
-  m_Speed: 1
+  m_Speed: 100
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 2732184331449835109}
@@ -35,7 +35,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: FadeStart
-  m_Speed: 1
+  m_Speed: 100
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 6125886065674568956}
@@ -60,7 +60,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: LevelLoader
+  m_Name: Quick Controller
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: Start
@@ -102,7 +102,7 @@ AnimatorStateMachine:
     m_Position: {x: 280, y: 40, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -7701685237267055421}
-    m_Position: {x: 280, y: 160, z: 0}
+    m_Position: {x: 290, y: 160, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []

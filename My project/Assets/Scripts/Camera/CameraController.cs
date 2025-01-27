@@ -27,6 +27,7 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
+        if (player == null) return ;
         // Check if the player has moved beyond the current camera view
         Vector3 playerPosition = player.position;
         Vector3 cameraPosition = cameraComponent.transform.position;
