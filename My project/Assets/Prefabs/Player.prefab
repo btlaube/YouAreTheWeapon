@@ -126,6 +126,7 @@ GameObject:
   - component: {fileID: 4825140692254156011}
   - component: {fileID: 1065352143112582662}
   - component: {fileID: 4815481331327042124}
+  - component: {fileID: 2588392924168411374}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -361,7 +362,7 @@ MonoBehaviour:
   - {x: 0.625, y: -0.875, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: 72614
+  m_InstanceId: -196162
   m_LocalBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.625, y: 0.875, z: 0}
@@ -382,7 +383,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1065352143112582662}
         m_TargetAssemblyTypeName: PlayerHealth, Assembly-CSharp
-        m_MethodName: TakeDamage
+        m_MethodName: TakeSwordDamage
         m_Mode: 4
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -407,8 +408,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 518f55d7cb9aad04fa2c0a0085ab3dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentHealth: 10
-  startingHealth: 2
+  swordHealthBar: {fileID: 0}
+  swordCurrentHealth: 0
+  swordMaxHealth: 5
+  swordStartingHealth: 5
+  wielderHealthBar: {fileID: 0}
+  wielderCurrentHealth: 0
+  wielderMaxHealth: 5
+  wielderStartingHealth: 5
   deathEvent:
     m_PersistentCalls:
       m_Calls:
@@ -424,6 +431,38 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  swordBreakEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4815481331327042124}
+        m_TargetAssemblyTypeName: RoomSceneTransitions, Assembly-CSharp
+        m_MethodName: LoadScene
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  wielderDeathEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4815481331327042124}
+        m_TargetAssemblyTypeName: RoomSceneTransitions, Assembly-CSharp
+        m_MethodName: ResetScene
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  healSwordKeys: 
+  healWielderKeys: 
 --- !u!114 &4815481331327042124
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -436,6 +475,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8afd691781b02f34b96ff4784f1e692b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2588392924168411374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6070321365732187746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbfb3cf5c1e2d704c8f7a7cd21f4c078, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackKeys: 
+  attackPrefab: {fileID: 696073430788635112, guid: 652df521aafb1204faeb8fc649ca031a, type: 3}
 --- !u!1 &6355463009542369474
 GameObject:
   m_ObjectHideFlags: 0
@@ -506,8 +559,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1177959707
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: f20e4fd68dd998a429c5464c58c6853f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

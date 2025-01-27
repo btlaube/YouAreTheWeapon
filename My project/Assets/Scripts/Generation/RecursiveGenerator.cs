@@ -34,6 +34,16 @@ public class RecursiveGenerator : MonoBehaviour
         mCamera.GetComponent<CameraController>().UpdateCameraPositions();
     }
 
+    void Update()
+    {
+        // DEBUG: Testing purposes clear rooms
+        if (Input.GetKeyDown(KeyCode.R)) // Press 'R' to trigger the function
+        {
+            Regenerate();
+        }
+
+    }
+
     private void Generate()
     {
 
@@ -114,6 +124,7 @@ public class RecursiveGenerator : MonoBehaviour
                 roomPrefabInstance = Instantiate(finalRoomPrefab, new Vector2(room.position.x * roomWidth, room.position.y * roomHeight), Quaternion.identity, transform);
                 Tilemap tilemap = roomPrefabInstance.GetComponentInChildren<Tilemap>();
                 AddTilesToRoom(room, tilemap, wallTile, floorTile);
+                AddExitWallsToRoom(room, tilemap, wallTile, floorTile);
             }
             else // Middle rooms
             {
@@ -125,7 +136,7 @@ public class RecursiveGenerator : MonoBehaviour
             }
 
             
-            // Debug.Log(room);
+            Debug.Log(room);
         }
     }
 
@@ -215,7 +226,18 @@ public class RecursiveGenerator : MonoBehaviour
         // Make previous final room new starting room
             // Generate new maze starting from previous final room
             // Don't generate a StartRoom prefab (skip to Middle Room)
-        // Possibly center new maaze.
+        // Possibly center new maze.
+
+
+        // Loop through all children except the last one and destroy them
+        for (int i = 0; i < transform.childCount - 1; i++)
+        {
+            Destroy( transform.GetChild(i).gameObject);
+        }
+
+        // Reset the last child's position
+        Transform lastChild = transform.GetChild(transform.childCount - 1);
+        lastChild.localPosition = Vector3.zero;
     }
 
 }

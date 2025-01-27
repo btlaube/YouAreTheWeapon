@@ -105,7 +105,7 @@ public class MazeGenerator : MonoBehaviour
                 // Check if the current cell is the center of a room
                 if (x % 4 == 2 && y % 4 == 2)
                 {
-                    Debug.Log($"Room Center at: ({x},{y})");
+                    // Debug.Log($"Room Center at: ({x},{y})");
                     // Check if this is a dead end
                     Vector2Int cell = new Vector2Int(x, y);
                     if (IsDeadEnd(cell)) // No lights on maze edge.
@@ -356,7 +356,7 @@ public class MazeGenerator : MonoBehaviour
 
     private void SpawnLight(Vector2Int room)
     {
-        Debug.Log($"Spawning Light at ({room})");
+        // Debug.Log($"Spawning Light at ({room})");
         // Center position of the room cell in the expanded grid
         Vector2Int roomCenter = new Vector2Int(room.x * 4 + 2, room.y * 4 + 2);
         

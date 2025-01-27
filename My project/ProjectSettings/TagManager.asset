@@ -6,6 +6,8 @@ TagManager:
   tags:
   - CameraPosition
   - Enemy
+  - Attack
+  - LevelLoader
   layers:
   - Default
   - TransparentFX

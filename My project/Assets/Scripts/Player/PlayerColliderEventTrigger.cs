@@ -8,9 +8,9 @@ public class PlayerColliderEventTrigger : MonoBehaviour
     public UnityEvent hitEnemy;
     public UnityEvent myEvent;
 
-    public void OnTriggerEnter2D(Collider2D other)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        switch(other.tag)
+        switch(collision.transform.tag)
         {
             case "Enemy":
                 Debug.Log("Outch");
