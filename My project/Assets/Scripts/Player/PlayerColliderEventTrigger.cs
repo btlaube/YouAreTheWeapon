@@ -29,6 +29,10 @@ public class PlayerColliderEventTrigger : MonoBehaviour
                 Debug.Log("Player damage");
                 if (wielderDamage != null) wielderDamage.Invoke();
                 break;
+            case "Coin":
+                Debug.Log("Collect coin.");
+                GetComponent<PlayerCoins>().GainCoins(1);
+                break;
             default:
                 break;
         }

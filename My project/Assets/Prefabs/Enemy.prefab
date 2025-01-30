@@ -323,7 +323,7 @@ MonoBehaviour:
   - {x: 0.625, y: -0.875, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: 285840
+  m_InstanceId: 302460
   m_LocalBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.625, y: 0.875, z: 0}
@@ -360,6 +360,7 @@ MonoBehaviour:
   deathEvent:
     m_PersistentCalls:
       m_Calls: []
+  dropItem: {fileID: 1106568027160911846, guid: 3c158fbb1387125409db30b161d1fa1a, type: 3}
 --- !u!114 &690536076212695994
 MonoBehaviour:
   m_ObjectHideFlags: 0

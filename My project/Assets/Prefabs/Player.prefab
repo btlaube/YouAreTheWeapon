@@ -363,7 +363,7 @@ MonoBehaviour:
   - {x: 0.625, y: -0.875, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: -265426
+  m_InstanceId: -410420
   m_LocalBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.625, y: 0.875, z: 0}
@@ -498,7 +498,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbfb3cf5c1e2d704c8f7a7cd21f4c078, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackCooldown: 0.75
+  attackCooldown: 1
   attackKeys: 
   attackPrefab: {fileID: 696073430788635112, guid: 652df521aafb1204faeb8fc649ca031a, type: 3}
 --- !u!114 &881652898080723748
@@ -650,8 +650,13 @@ MonoBehaviour:
   attackSpeed: 0
   maxHealth: 0
   startingHealth: 0
+  movementText: {fileID: 0}
+  attackSpeedText: {fileID: 0}
+  maxHealthText: {fileID: 0}
   playerController: {fileID: 0}
+  playerAttack: {fileID: 0}
   playerHealth: {fileID: 0}
+  randomizeStats: 0
 --- !u!1001 &1876966785337247815
 PrefabInstance:
   m_ObjectHideFlags: 0

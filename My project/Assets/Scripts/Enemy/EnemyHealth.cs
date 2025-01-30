@@ -8,6 +8,7 @@ public class EnemyHealth : MonoBehaviour
     [SerializeField] private float startingHealth;
 
     public UnityEvent deathEvent;
+    public GameObject dropItem;
 
     private bool dead;
 
@@ -39,6 +40,7 @@ public class EnemyHealth : MonoBehaviour
     public void Deactivate()
     {
         if (deathEvent != null) deathEvent.Invoke();
+        Instantiate(dropItem, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }
 

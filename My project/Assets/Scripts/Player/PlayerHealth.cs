@@ -32,7 +32,7 @@ public class PlayerHealth : MonoBehaviour
         playerAnimator = GetComponent<Animator>();
 
         swordCurrentHealth = swordStartingHealth;
-        wielderCurrentHealth = wielderStartingHealth;
+        // wielderCurrentHealth = wielderStartingHealth;
     }
 
     void Start()
@@ -41,6 +41,9 @@ public class PlayerHealth : MonoBehaviour
         Settings settings = Settings.Instance;
         healSwordKeys = settings.LookUpKeyBind("Heal Sword");
         healWielderKeys = settings.LookUpKeyBind("Heal Wielder");
+
+        // Check for persisted sword health
+        swordCurrentHealth = PlayerPrefs.GetInt("SwordStartingHealth", (int)swordStartingHealth);
 
         UpdateHealthBar(swordHealthBar, swordCurrentHealth, swordMaxHealth);
         UpdateHealthBar(wielderHealthBar, wielderCurrentHealth, wielderMaxHealth);
@@ -63,14 +66,35 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
+    public void FullHealSword()
+    {
+        SetSwordStartingHealth(swordMaxHealth);
+    }
+    
+    public void SaveSwordHealth()
+    {
+        PlayerPrefs.SetInt("SwordStartingHealth", (int)swordCurrentHealth);
+        PlayerPrefs.Save();
+    }
+
     public void SetWielderMaxHealth(float maxHealth)
     {
         wielderMaxHealth = maxHealth;
+        UpdateHealthBar(wielderHealthBar, wielderCurrentHealth, wielderMaxHealth);
     }
 
     public void SetWielderStartingHealth(float startingHealth)
     {
         wielderStartingHealth = startingHealth;
+        wielderCurrentHealth = wielderStartingHealth;
+        UpdateHealthBar(wielderHealthBar, wielderCurrentHealth, wielderMaxHealth);
+    }
+
+    public void SetSwordStartingHealth(float startingHealth)
+    {
+        swordStartingHealth = startingHealth;
+        swordCurrentHealth = swordStartingHealth;
+        UpdateHealthBar(swordHealthBar, swordCurrentHealth, swordMaxHealth);
     }
 
     // Take damage functions
@@ -154,4 +178,15 @@ public class PlayerHealth : MonoBehaviour
         // Resets to end of previous room
         wielderDeathEvent.Invoke();
     }
+
+    public bool IsSwordMaxHealth()
+    {
+        return swordCurrentHealth == swordMaxHealth;
+    }
+
+    public bool IsWielderMaxHealth()
+    {
+        return wielderCurrentHealth == wielderMaxHealth;
+    }
+
 }

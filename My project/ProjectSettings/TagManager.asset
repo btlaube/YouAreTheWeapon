@@ -9,6 +9,7 @@ TagManager:
   - Attack
   - LevelLoader
   - EnemyAttack
+  - Coin
   layers:
   - Default
   - TransparentFX

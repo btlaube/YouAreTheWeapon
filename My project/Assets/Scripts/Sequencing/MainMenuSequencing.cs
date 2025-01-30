@@ -24,6 +24,10 @@ public class MainMenuSequencing : MonoBehaviour
     public void StartButtonSequence()
     {
         Debug.Log("Start button sequence");
+        // Set swpawn wielder to true
+        PlayerPrefs.SetInt("SpawnWielder", 0);
+        PlayerPrefs.SetInt("ShowWielder", 0);
+        PlayerPrefs.Save();
 
         // TODO: Add option check for skip intro scene
         // if (!skip intro scene)
@@ -41,6 +45,7 @@ public class MainMenuSequencing : MonoBehaviour
         mainMenuCanvas.GetComponent<Canvas>().enabled = false;
         // Show Player (no sword)
         if (player != null) player.position = new Vector2(-10, -9);
+        player.GetComponent<SpriteRenderer>().enabled = false;
         // wait
         yield return new WaitForSeconds(1f);
         // Fade in
