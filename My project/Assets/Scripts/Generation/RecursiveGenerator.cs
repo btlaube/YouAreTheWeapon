@@ -5,11 +5,12 @@ using UnityEngine.Tilemaps;
 
 public class RecursiveGenerator : MonoBehaviour
 {
-    [SerializeField] int width, height;
-    [SerializeField] int numRooms, roomWidth, roomHeight;
-    [SerializeField] GameObject roomPrefab;
-    [SerializeField] GameObject startRoomPrefab;
-    [SerializeField] GameObject finalRoomPrefab;
+    public int width, height;
+    public Vector2Int roomNumRange;
+    public int numRooms, roomWidth, roomHeight;
+    public GameObject roomPrefab;
+    public GameObject startRoomPrefab;
+    public GameObject finalRoomPrefab;
 
     [SerializeField] private Dictionary<Vector2Int, Room> roomMap = new Dictionary<Vector2Int, Room>(); // Map to store rooms by position
 
@@ -17,6 +18,10 @@ public class RecursiveGenerator : MonoBehaviour
     public TileBase wallTile;
     public TileBase floorTile;
     public TileBase platformTile;
+    public TileBase vertDoorTile;
+    public TileBase horiDoorTile;
+
+    public GameObject doorLightPrefab;
 
     private Camera mCamera;
 
@@ -27,35 +32,37 @@ public class RecursiveGenerator : MonoBehaviour
 
     void Start()
     {
-        // Randomize room count
-        numRooms = Random.Range(4, 7);
-        Generate();
-        GenAgain();
-        mCamera.GetComponent<CameraController>().UpdateCameraPositions();
+        //     // Randomize room count
+        //     numRooms = Random.Range(4, 7);
+        // Generate();
+        //     GenAgain();
+        //     mCamera.GetComponent<CameraController>().UpdateCameraPositions();
     }
 
-    void Update()
+    public void DebugRoomMap()
     {
-        // DEBUG: Testing purposes clear rooms
-        if (Input.GetKeyDown(KeyCode.R)) // Press 'R' to trigger the function
+        foreach (KeyValuePair<Vector2Int, Room> entry in roomMap)
         {
-            Regenerate();
-        }
+            Vector2Int position = entry.Key;
+            Room room = entry.Value;
 
+            Debug.Log($"Position: {position}, Room: {room}");
+        }
     }
 
-    private void Generate()
+    public void Generate()
     {
-
-        // Start the recursive room generation from the starting room
-        int startX = 0;
-        int startY = 0;
+        // Randomize room count
+        numRooms = Random.Range(roomNumRange.x, roomNumRange.y);
 
         Room startRoom = new Room(0, new Vector2Int(0, 0));
-        startRoom.exitPoint = new Vector2Int(1, 0);
+        startRoom.exitPoint = new Vector2Int(1, 0); // Fix exit to right
+        startRoom.exitPointOffset = OffsetEntryOrExit(startRoom.exitPoint);
         roomMap[new Vector2Int(0, 0)] = startRoom;
 
-        GeneratePath(startRoom, startX + startRoom.exitPoint.x, startY + startRoom.exitPoint.y, 1); // Start recursive path generation
+        GeneratePath(startRoom, startRoom.exitPoint.x, startRoom.exitPoint.y, 1); // Start recursive path generation
+        GenAgain();
+        StartCoroutine(WaitAndUpdateCamera());
     }
 
     private bool GeneratePath(Room previousRoom, int x, int y, int roomsCreated)
@@ -69,6 +76,7 @@ public class RecursiveGenerator : MonoBehaviour
         Room currentRoom = new Room(roomsCreated, position);
         currentRoom.prevRoom = previousRoom;
         currentRoom.entryPoint = previousRoom.exitPoint * new Vector2Int(-1, -1);
+        currentRoom.entryPointOffset = previousRoom.exitPointOffset;    //OffsetEntryOrExit(currentRoom.entryPoint);
         previousRoom.nextRoom = currentRoom;
         roomMap[new Vector2Int(x, y)] = currentRoom;
         
@@ -94,9 +102,12 @@ public class RecursiveGenerator : MonoBehaviour
             if (nextX >= 0 && nextX < width && nextY >= 0 && nextY < height && !roomMap.ContainsKey(nextPosition))
             {
                 // if next room, set exit point
-                if (roomsCreated != numRooms-1)
-                    currentRoom.exitPoint = direction;
-                // Recur to generate the next room in the path
+                // if (roomsCreated != numRooms-1)
+                currentRoom.exitPoint = direction; // Ignore check for next room add exitPoint to Final Room.
+
+                currentRoom.exitPointOffset = OffsetEntryOrExit(currentRoom.exitPoint);
+
+                // Recurse to generate the next room in the path
                 if (GeneratePath(currentRoom, nextX, nextY, roomsCreated + 1))
                 {
                     return true;
@@ -105,6 +116,23 @@ public class RecursiveGenerator : MonoBehaviour
         }
         return false; // Return false if no valid room placement is found
     }    
+
+    public int OffsetEntryOrExit(Vector2Int roomEntryOrExit)
+    {
+        int offset;
+        // Create exit point offset based on direction 
+            // Horizontal exit has more possible exit options
+        if (roomEntryOrExit.x == 0) // Up and down options
+        {
+            // offset = Random.Range(0, 10);
+            offset = 8;
+        }
+        else // Right exit option
+        {
+            offset = Random.Range(0, 5);
+        }
+        return offset;
+    }
 
     private void GenAgain()
     {
@@ -115,6 +143,7 @@ public class RecursiveGenerator : MonoBehaviour
             if (room.prevRoom == null) // Start room
             {
                 roomPrefabInstance = Instantiate(startRoomPrefab, new Vector2(room.position.x * roomWidth, room.position.y * roomHeight), Quaternion.identity, transform);
+                room.SetInstance(roomPrefabInstance);
                 Tilemap tilemap = roomPrefabInstance.GetComponentInChildren<Tilemap>();
                 AddTilesToRoom(room, tilemap, wallTile, floorTile);
                 AddExitWallsToRoom(room, tilemap, wallTile, floorTile);
@@ -122,6 +151,7 @@ public class RecursiveGenerator : MonoBehaviour
             else if (room.nextRoom == null) // Final room
             {
                 roomPrefabInstance = Instantiate(finalRoomPrefab, new Vector2(room.position.x * roomWidth, room.position.y * roomHeight), Quaternion.identity, transform);
+                room.SetInstance(roomPrefabInstance);
                 Tilemap tilemap = roomPrefabInstance.GetComponentInChildren<Tilemap>();
                 AddTilesToRoom(room, tilemap, wallTile, floorTile);
                 AddExitWallsToRoom(room, tilemap, wallTile, floorTile);
@@ -129,7 +159,8 @@ public class RecursiveGenerator : MonoBehaviour
             else // Middle rooms
             {
                 roomPrefabInstance = Instantiate(roomPrefab, new Vector2(room.position.x * roomWidth, room.position.y * roomHeight), Quaternion.identity, transform);
-                roomPrefabInstance.GetComponent<MazeGenerator>().ActivateMaze(room.entryPoint, room.exitPoint);
+                roomPrefabInstance.GetComponent<MazeGenerator>().ActivateMaze(room, room.entryPoint, room.exitPoint);
+                room.SetInstance(roomPrefabInstance);
                 Tilemap tilemap = roomPrefabInstance.GetComponentInChildren<Tilemap>();
                 AddTilesToRoom(room, tilemap, wallTile, floorTile);
                 AddExitWallsToRoom(room, tilemap, wallTile, floorTile);
@@ -180,13 +211,14 @@ public class RecursiveGenerator : MonoBehaviour
         }
     }
 
+
+    // TODO: Modify to only draw on exits, find hasLeftExit not hasLeftWall, etc.
     private void AddExitWallsToRoom(Room room, Tilemap tilemap, TileBase wallTile, TileBase floorTile)
     {
-        // Determine which walls, ceiling, and floor should have tiles
-        bool hasLeftWall = room.entryPoint != new Vector2Int(-1, 0) && room.exitPoint != new Vector2Int(-1, 0);
-        bool hasRightWall = room.entryPoint != new Vector2Int(1, 0) && room.exitPoint != new Vector2Int(1, 0);
-        bool hasBottomWall = room.entryPoint != new Vector2Int(0, -1) && room.exitPoint != new Vector2Int(0, -1);
-        bool hasTopWall = room.entryPoint != new Vector2Int(0, 1) && room.exitPoint != new Vector2Int(0, 1);
+        // bool hasLeftExit= mazeExit == new Vector2Int(-1, 0);
+        bool hasRightExit = room.exitPoint == new Vector2Int(1, 0);
+        bool hasBottomExit = room.exitPoint == new Vector2Int(0, -1);
+        bool hasTopExit = room.exitPoint == new Vector2Int(0, 1);
 
         // Offset to move the tiles to the bottom-left corner
         int offsetX = -roomWidth / 2;
@@ -202,42 +234,230 @@ public class RecursiveGenerator : MonoBehaviour
                 int tileY = y + offsetY;
 
                 // Right exit
-                if (!hasRightWall && x == roomWidth - 1 && y > 3)
-                    tilemap.SetTile(new Vector3Int(tileX, tileY, 0), wallTile);
+                if (hasRightExit && x == roomWidth - 1)
+                {
+                    if (y <= (room.exitPointOffset * 4) || y >= ((room.exitPointOffset * 4) + 4))
+                    {
+                        tilemap.SetTile(new Vector3Int(tileX, tileY, 0), wallTile);
+                    }
+                    else
+                    {
+                        tilemap.SetTile(new Vector3Int(tileX, tileY, 0), vertDoorTile);
+                        // Check if the current cell is the center of the door vertically
+                        if (y % 4 == 2)
+                            Instantiate(doorLightPrefab, new Vector2(room.instance.transform.position.x + tileX, room.instance.transform.position.y + tileY), Quaternion.identity, room.instance.transform);
+                    }
+                }
 
                 // Bottom exit
-                if (!hasBottomWall && y == 0 && x < roomWidth - 4)
-                    tilemap.SetTile(new Vector3Int(tileX, tileY, 0), floorTile);
+                if (hasBottomExit && y == 0)
+                {
+                    if (x <= (room.exitPointOffset * 4) || x >= ((room.exitPointOffset * 4) + 4))
+                    {
+                        tilemap.SetTile(new Vector3Int(tileX, tileY, 0), floorTile);
+                    }
+                    else
+                    {
+                        tilemap.SetTile(new Vector3Int(tileX, tileY, 0), horiDoorTile);
+                        // Check if the current cell is the center of the door vertically
+                        if (x % 4 == 2)
+                            Instantiate(doorLightPrefab, new Vector2(room.instance.transform.position.x + tileX, room.instance.transform.position.y + tileY), Quaternion.identity, room.instance.transform);
+                    }
+                }
 
                 // Top exit
-                if (!hasTopWall && y == roomHeight - 1 && x < roomWidth - 4)
-                    tilemap.SetTile(new Vector3Int(tileX, tileY, 0), floorTile);
+                if (hasTopExit && y == roomHeight - 1)
+                {
+                    if (x <= (room.exitPointOffset * 4) || x >= ((room.exitPointOffset * 4) + 4))
+                    {
+                        tilemap.SetTile(new Vector3Int(tileX, tileY, 0), floorTile);
+                    }
+                    else
+                    {
+                        tilemap.SetTile(new Vector3Int(tileX, tileY, 0), horiDoorTile);
+                        // Check if the current cell is the center of the door vertically
+                        if (x % 4 == 2)
+                            Instantiate(doorLightPrefab, new Vector2(room.instance.transform.position.x + tileX, room.instance.transform.position.y + tileY), Quaternion.identity, room.instance.transform);
+                    }
+                }
             }
         }
+    }
+    
+    public void ClearRoomExitDoor(Vector2Int roomPosition)
+    {
+        Room room = roomMap[roomPosition];
+        Tilemap tilemap = room.instance.GetComponentInChildren<Tilemap>();
+
+        // bool hasLeftExit= mazeExit == new Vector2Int(-1, 0);
+        bool hasRightExit = room.exitPoint == new Vector2Int(1, 0);
+        bool hasBottomExit = room.exitPoint == new Vector2Int(0, -1);
+        bool hasTopExit = room.exitPoint == new Vector2Int(0, 1);
+
+        StartCoroutine(AnimateExitDoor(room, tilemap, hasRightExit, hasBottomExit, hasTopExit));
+
+
+        // Offset to move the tiles to the bottom-left corner
+        // int offsetX = -roomWidth / 2;
+        // int offsetY = -roomHeight / 2;
+
+        // Add tiles to the tilemap based on the presence of walls/floors/ceilings
+        // for (int x = 0; x <= roomWidth; x++)
+        // {
+        //     for (int y = 0; y <= roomHeight; y++)
+        //     {
+        //         // Adjust the position with the offset
+        //         int tileX = x + offsetX;
+        //         int tileY = y + offsetY;
+
+        //         // Right exit
+        //         if (hasRightExit && x == roomWidth - 1)
+        //         {
+        //             if (y <= (room.exitPointOffset * 4) || y >= ((room.exitPointOffset * 4) + 4))
+        //             {
+        //                 // Nothing here
+        //             }
+        //             else
+        //             {
+        //                 tilemap.SetTile(new Vector3Int(tileX, tileY, 0), null); // Clear door tiles
+        //             }
+        //         }
+
+        //         // Bottom exit
+        //         if (hasBottomExit && y == 0)
+        //         {
+        //             if (x <= (room.exitPointOffset * 4) || x >= ((room.exitPointOffset * 4) + 4))
+        //             {
+        //                 // Nothing here
+        //             }
+        //             else
+        //             {
+        //                 tilemap.SetTile(new Vector3Int(tileX, tileY, 0), null);  // Clear door tiles
+        //             }
+        //         }
+
+        //         // Top exit
+        //         if (hasTopExit && y == roomHeight - 1)
+        //         {
+        //             if (x <= (room.exitPointOffset * 4) || x >= ((room.exitPointOffset * 4) + 4))
+        //             {
+        //                 tilemap.SetTile(new Vector3Int(tileX, tileY, 0), floorTile);
+        //             }
+        //             else
+        //             {
+        //                 tilemap.SetTile(new Vector3Int(tileX, tileY, 0), null);  // Clear door tiles
+        //             }
+        //         }
+        //     }
+        // }
+    }
+
+    public IEnumerator AnimateExitDoor(Room room, Tilemap tilemap, bool hasRightExit, bool hasBottomExit, bool hasTopExit)
+    {
+        // Vertical Door tiles (flip x and y for horizontal doors)
+        // Top: (roomWidth - 1, room.exitPointOffset * 4 + 1)
+        // Center: (roomWidth - 1, room.exitPointOffset * 4 + 2)
+        // Bottom: (roomWidth - 1, room.exitPointOffset * 4 + 3)
+
+        // Offset to move the tiles to the bottom-left corner
+        Vector2Int offset = new Vector2Int(-roomWidth / 2, -roomHeight / 2);
+
+        for (int i = 1; i < 4; i++)
+        {
+            if (hasRightExit)
+            {
+                Debug.Log($"Removign door tile at: ({(roomWidth - 1) + offset.x}, {((room.exitPointOffset * 4) + i) + offset.y}");
+                tilemap.SetTile(new Vector3Int((roomWidth - 1) + offset.x, ((room.exitPointOffset * 4) + i) + offset.y, 0), null);  // Clear door tiles
+                yield return new WaitForSeconds(0.55f);
+            }
+            if (hasBottomExit)
+            {
+                tilemap.SetTile(new Vector3Int(((room.exitPointOffset * 4) + i) + offset.x, 0 + offset.y, 0), null);  // Clear door tiles
+                yield return new WaitForSeconds(0.55f);
+            }
+            if (hasTopExit)
+            {
+                tilemap.SetTile(new Vector3Int(((room.exitPointOffset * 4) + i) + offset.x, (roomHeight - 1) + offset.y, 0), null);  // Clear door tiles
+                yield return new WaitForSeconds(0.5f);
+            }
+        }
+        yield return new WaitForSeconds(0.1f);
     }
 
     public void ClearRooms()
     {
-
-    }
-
-    public void Regenerate()
-    {
-        // Make previous final room new starting room
-            // Generate new maze starting from previous final room
-            // Don't generate a StartRoom prefab (skip to Middle Room)
-        // Possibly center new maze.
-
-
         // Loop through all children except the last one and destroy them
         for (int i = 0; i < transform.childCount - 1; i++)
         {
-            Destroy( transform.GetChild(i).gameObject);
+            Destroy(transform.GetChild(i).gameObject);
         }
 
         // Reset the last child's position
         Transform lastChild = transform.GetChild(transform.childCount - 1);
         lastChild.localPosition = Vector3.zero;
+    }
+
+    public void ClearRoomMap()
+    {
+        // Clear roomMap
+        Dictionary<Vector2Int, Room> newMap = new Dictionary<Vector2Int, Room>(); // Map to store rooms by position
+        foreach (KeyValuePair<Vector2Int, Room> kvp in roomMap)
+        {
+            Vector2Int position = kvp.Key;
+            Room room = kvp.Value;
+            if (room.nextRoom == null)   // Final room
+            {
+                Debug.Log($"Dont remove final room: {room}");
+                room.position = new Vector2Int(0, 0);
+                newMap[new Vector2Int(0, 0)] = room; // Only add previous final room to new room map at 0, 0
+            }
+        }
+        roomMap = newMap;
+    }
+
+    public void Regenerate()
+    {
+        ClearRooms();
+
+        // Get the previous final room
+        Room startRoom = null;
+        foreach (Room room in roomMap.Values)
+        {
+            if (room.nextRoom == null) // Final room
+            {
+                startRoom = room;
+                break;
+            }
+        }
+
+        if (startRoom == null) return;
+
+        // Calculate the new starting position based on the exitPoint of the previous final room
+        Vector2Int newStartPosition = startRoom.position + startRoom.exitPoint;
+
+        // Update the room's position and reset connections
+        startRoom.position = newStartPosition;
+        startRoom.prevRoom = null;
+        startRoom.nextRoom = null;
+
+        ClearRoomMap();
+
+        // Randomize room count
+        numRooms = Random.Range(4, 7);
+
+        Debug.Log($"New start room: {startRoom}");
+
+        // GeneratePath(startRoom, startRoom.exitPoint.x, startRoom.exitPoint.y, 1); // Start recursive path generation
+        GeneratePath(startRoom, newStartPosition.x, newStartPosition.y, 1);
+        GenAgain();
+        StartCoroutine(WaitAndUpdateCamera());
+    }
+
+    public IEnumerator WaitAndUpdateCamera()
+    {
+        yield return new WaitForSeconds(0.01f);
+        mCamera.GetComponent<CameraController>().ClearCameraPositions();
+        mCamera.GetComponent<CameraController>().UpdateCameraPositions();
     }
 
 }

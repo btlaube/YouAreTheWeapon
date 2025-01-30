@@ -5,16 +5,29 @@ using UnityEngine.Events;
 
 public class PlayerColliderEventTrigger : MonoBehaviour
 {
-    public UnityEvent hitEnemy;
-    public UnityEvent myEvent;
+    public UnityEvent swordDamage;
+    public UnityEvent wielderDamage;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         switch(collision.transform.tag)
         {
             case "Enemy":
-                Debug.Log("Outch");
-                if (hitEnemy != null) hitEnemy.Invoke();
+                Debug.Log("Sword damage");
+                if (swordDamage != null) swordDamage.Invoke();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        switch(other.tag)
+        {
+            case "EnemyAttack":
+                Debug.Log("Player damage");
+                if (wielderDamage != null) wielderDamage.Invoke();
                 break;
             default:
                 break;

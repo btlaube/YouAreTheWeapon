@@ -5,12 +5,9 @@ using UnityEngine.Events;
 
 public class PlayerHealth : MonoBehaviour
 {
-    // public float currentHealth;
-    // public float maxHealth;
-    // [SerializeField] private float startingHealth;
 
-    // TODO: Add separate variables for sword and wielder health
-        // Add reference to contols (custom key binds) for "Heal Sword" (default X) and "Heal Wielder" (default C)
+    public Animator playerAnimator;
+
     public HealthBar swordHealthBar;
     public float swordCurrentHealth;
     [SerializeField] private float swordMaxHealth;
@@ -32,11 +29,10 @@ public class PlayerHealth : MonoBehaviour
 
     private void Awake()
     {
-        swordCurrentHealth = swordStartingHealth;
-        swordMaxHealth = swordStartingHealth;
+        playerAnimator = GetComponent<Animator>();
 
+        swordCurrentHealth = swordStartingHealth;
         wielderCurrentHealth = wielderStartingHealth;
-        wielderMaxHealth = wielderStartingHealth;
     }
 
     void Start()
@@ -45,23 +41,36 @@ public class PlayerHealth : MonoBehaviour
         Settings settings = Settings.Instance;
         healSwordKeys = settings.LookUpKeyBind("Heal Sword");
         healWielderKeys = settings.LookUpKeyBind("Heal Wielder");
+
+        UpdateHealthBar(swordHealthBar, swordCurrentHealth, swordMaxHealth);
+        UpdateHealthBar(wielderHealthBar, wielderCurrentHealth, wielderMaxHealth);
     }
 
     void Update()
     {
         // Heal Inputs
-        if (IsAnyKeyDown(healSwordKeys) && swordCurrentHealth != swordMaxHealth)
+        if (IsAnyKeyDown(healSwordKeys) && swordCurrentHealth != swordMaxHealth && wielderCurrentHealth != 1)
         {
             Debug.Log("Heal sword!");
             GainSwordHealth(1f);
             TakeWielderDamage(1f);
         }
-        if (IsAnyKeyDown(healWielderKeys) && wielderCurrentHealth != wielderMaxHealth)
+        if (IsAnyKeyDown(healWielderKeys) && wielderCurrentHealth != wielderMaxHealth && swordCurrentHealth != 1)
         {
             Debug.Log("Heal wielder!");
             GainWielderHealth(1f);
             TakeSwordDamage(1f);
         }
+    }
+
+    public void SetWielderMaxHealth(float maxHealth)
+    {
+        wielderMaxHealth = maxHealth;
+    }
+
+    public void SetWielderStartingHealth(float startingHealth)
+    {
+        wielderStartingHealth = startingHealth;
     }
 
     // Take damage functions
@@ -141,6 +150,7 @@ public class PlayerHealth : MonoBehaviour
     public void WielderDeath()
     {
         Debug.Log("Wielder Falls!");
+        playerAnimator.SetTrigger("Die");
         // Resets to end of previous room
         wielderDeathEvent.Invoke();
     }

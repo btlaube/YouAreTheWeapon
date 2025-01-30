@@ -15,6 +15,7 @@ public class AudioHandler : MonoBehaviour
             s.source.volume = s.volume;
             s.source.pitch = s.pitch;
             s.source.loop = s.loop;
+            if (s.playOnAwake) Play(s.name);
         }
     }
 

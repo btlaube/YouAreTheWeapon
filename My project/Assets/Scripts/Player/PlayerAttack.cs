@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class PlayerAttack : MonoBehaviour
 {
+    public float attackCooldown;
+    private float attackTimer;
+    private bool hasAttacked;
+
     public List<KeyCode> attackKeys;
     public GameObject attackPrefab;
     private SpriteRenderer sr;
@@ -19,17 +23,27 @@ public class PlayerAttack : MonoBehaviour
         Settings settings = Settings.Instance;
         attackKeys = settings.LookUpKeyBind("Attack");
 
+        hasAttacked = false;
+        attackTimer = 0f;
     }
 
     // Update is called once per frame
     void Update()
     {
-
-        // TODO: Implement attack cooldown
-        if (IsAnyKeyDown(attackKeys))
+        if (IsAnyKeyDown(attackKeys) && !hasAttacked)
         {
             Debug.Log("Attack!");
             StartCoroutine(Attack());
+            hasAttacked = true;
+        }
+        if (hasAttacked)
+        {
+            attackTimer += Time.deltaTime;
+        }
+        if (attackTimer >= attackCooldown)
+        {
+            hasAttacked = false;
+            attackTimer = 0f;
         }
     }
 
@@ -61,7 +75,7 @@ public class PlayerAttack : MonoBehaviour
         GameObject attackObject = Instantiate(attackPrefab, transform.position, Quaternion.identity, transform);
         attackObject.transform.localPosition += (sr.flipX ? new Vector3(-1, 0.5f, 0) : new Vector3(1, 0.5f, 0));
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.125f);
 
         Destroy(attackObject);
     }

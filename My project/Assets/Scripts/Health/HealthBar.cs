@@ -20,9 +20,11 @@ public class HealthBar : MonoBehaviour
         
     // }
 
+
     public void UpdateHealthBar(float currentHealth, float maxHealth)
     {
-        currentHealthBar.fillAmount = currentHealth / maxHealth;
+        currentHealthBar.fillAmount = currentHealth / 10;
+        totalHealthBar.fillAmount = maxHealth / 10;
     }
 
 }

@@ -10,13 +10,16 @@ public class AttackCollider : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log($"Attack hit {other}");
         switch(other.tag)
         {
             case "Enemy":
                 Debug.Log("Attacked enemy");
                 EnemyHealth enemyHealth = other.transform.gameObject.GetComponent<EnemyHealth>();
-                if (enemyHealth != null) enemyHealth.TakeDamage(attackDamage); // Relies on Enemy having Child TriggerCollider
+                if (enemyHealth != null) enemyHealth.TakeDamage(attackDamage); // Relies on Enemy having TriggerCollider
+                break;
+            case "EnemyAttack":
+                Debug.Log("Attacked enemy attack");
+                Destroy(other.gameObject);
                 break;
             default:
                 break;

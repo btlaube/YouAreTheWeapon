@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 3019130879497754037}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.029, z: 0}
+  m_LocalPosition: {x: -0.125, y: -0.9374998, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -70,7 +70,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5295748227351054196}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -95,7 +95,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.08851156, y: 0.11229098}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -106,7 +106,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1.64}
+  m_Size: {x: 0.8229769, y: 1.4154179}
   m_EdgeRadius: 0
 --- !u!1 &6070321365732187746
 GameObject:
@@ -125,8 +125,8 @@ GameObject:
   - component: {fileID: 4419530571014236724}
   - component: {fileID: 4825140692254156011}
   - component: {fileID: 1065352143112582662}
-  - component: {fileID: 4815481331327042124}
   - component: {fileID: 2588392924168411374}
+  - component: {fileID: 881652898080723748}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -193,8 +193,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1177959707
   m_SortingLayer: 3
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 7be10b590b9781d40811c5d0cc662797, type: 3}
+  m_SortingOrder: 1
+  m_Sprite: {fileID: 667117848, guid: 8e1be96e5626f1d46b1a03dd98fc263d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -264,18 +264,18 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.1347489, y: -0.06605339}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: -0.1, y: 0.2}
-    oldSize: {x: 1, y: 1.75}
+    pivot: {x: 0.06, y: 0.41}
+    oldSize: {x: 2, y: 2}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.25, y: 1.75}
+  m_Size: {x: 0.9805022, y: 1.8821068}
   m_EdgeRadius: 0
 --- !u!114 &6473909751101100492
 MonoBehaviour:
@@ -289,8 +289,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 430c270fdd5799c4fa26e37bf795f3fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 13
-  acceleration: 10
+  speed: 7
+  acceleration: 20
   airAcceleration: 10
   jump: {x: 1, y: 7}
   jumpDurationThreshold: 0.5
@@ -308,7 +308,8 @@ MonoBehaviour:
   jumpDuration: 0
   rb: {fileID: 0}
   animator: {fileID: 0}
-  sr: {fileID: 0}
+  swordSr: {fileID: 0}
+  wielderSr: {fileID: 0}
   currentJumps: 0
   maxJumps: 2
   shouldJump: 0
@@ -362,7 +363,7 @@ MonoBehaviour:
   - {x: 0.625, y: -0.875, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: -196162
+  m_InstanceId: -265426
   m_LocalBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.625, y: 0.875, z: 0}
@@ -378,7 +379,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ea87efa413bad847bfc8ad240713e06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitEnemy:
+  swordDamage:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1065352143112582662}
@@ -390,12 +391,48 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 1
-          m_StringArgument: 1
+          m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  myEvent:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: CameraShake, Assembly-CSharp
+        m_MethodName: ShakeScreen
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 1
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  wielderDamage:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1065352143112582662}
+        m_TargetAssemblyTypeName: PlayerHealth, Assembly-CSharp
+        m_MethodName: TakeWielderDamage
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 1
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: CameraShake, Assembly-CSharp
+        m_MethodName: ShakeScreen
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 1
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1065352143112582662
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -408,6 +445,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 518f55d7cb9aad04fa2c0a0085ab3dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerAnimator: {fileID: 0}
   swordHealthBar: {fileID: 0}
   swordCurrentHealth: 0
   swordMaxHealth: 5
@@ -416,28 +454,13 @@ MonoBehaviour:
   wielderCurrentHealth: 0
   wielderMaxHealth: 5
   wielderStartingHealth: 5
-  deathEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 4815481331327042124}
-        m_TargetAssemblyTypeName: RoomSceneTransitions, Assembly-CSharp
-        m_MethodName: ResetScene
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
   swordBreakEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4815481331327042124}
-        m_TargetAssemblyTypeName: RoomSceneTransitions, Assembly-CSharp
-        m_MethodName: LoadScene
-        m_Mode: 3
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: GameSceneSequencing, Assembly-CSharp
+        m_MethodName: StartSwordDeathSequence
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -449,9 +472,9 @@ MonoBehaviour:
   wielderDeathEvent:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4815481331327042124}
-        m_TargetAssemblyTypeName: RoomSceneTransitions, Assembly-CSharp
-        m_MethodName: ResetScene
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: GameSceneSequencing, Assembly-CSharp
+        m_MethodName: StartWielderDeathSequence
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -463,18 +486,6 @@ MonoBehaviour:
         m_CallState: 2
   healSwordKeys: 
   healWielderKeys: 
---- !u!114 &4815481331327042124
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6070321365732187746}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8afd691781b02f34b96ff4784f1e692b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &2588392924168411374
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -487,8 +498,57 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbfb3cf5c1e2d704c8f7a7cd21f4c078, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attackCooldown: 0.75
   attackKeys: 
   attackPrefab: {fileID: 696073430788635112, guid: 652df521aafb1204faeb8fc649ca031a, type: 3}
+--- !u!114 &881652898080723748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6070321365732187746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1fae6aac1646c84391875d7ac8d345c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds:
+  - name: Walk
+    clip: {fileID: 0}
+    volume: 1
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  - name: Jump
+    clip: {fileID: 0}
+    volume: 1
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  - name: Attack
+    clip: {fileID: 0}
+    volume: 1
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  - name: Damaged
+    clip: {fileID: 0}
+    volume: 1
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  - name: Died
+    clip: {fileID: 0}
+    volume: 1
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
 --- !u!1 &6355463009542369474
 GameObject:
   m_ObjectHideFlags: 0
@@ -499,6 +559,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8568320668251114495}
   - component: {fileID: 8778566102499506884}
+  - component: {fileID: 7461411162704486100}
   m_Layer: 0
   m_Name: Character Sprite
   m_TagString: Untagged
@@ -561,8 +622,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1177959707
   m_SortingLayer: 3
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: f20e4fd68dd998a429c5464c58c6853f, type: 3}
+  m_SortingOrder: 2
+  m_Sprite: {fileID: 1027580914, guid: 82d1ff5bf80281348bafefa565374e12, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -573,6 +634,24 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &7461411162704486100
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6355463009542369474}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 048b4915944eb5549af2a69fdcb1bb6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  movement: 0
+  attackSpeed: 0
+  maxHealth: 0
+  startingHealth: 0
+  playerController: {fileID: 0}
+  playerHealth: {fileID: 0}
 --- !u!1001 &1876966785337247815
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -583,7 +662,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1087137000483822030, guid: 30bd8d98fdc24a742a65718605c0349e, type: 3}
       propertyPath: m_Name
-      value: CircleLight
+      value: PlayerLight
       objectReference: {fileID: 0}
     - target: {fileID: 3757160148245925451, guid: 30bd8d98fdc24a742a65718605c0349e, type: 3}
       propertyPath: m_LocalPosition.x

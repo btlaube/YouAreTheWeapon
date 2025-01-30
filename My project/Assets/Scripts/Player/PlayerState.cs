@@ -107,11 +107,11 @@ public class WallClingingState : PlayerState
         int wallDirection = playerController.GetWallDirection();
         if (wallDirection == -1)
         {
-            playerController.sr.flipX = false;
+            playerController.FlipSprite(false);
         }
         else if (wallDirection == 1)
         {
-            playerController.sr.flipX = true;
+            playerController.FlipSprite(true);
         }
     }
 

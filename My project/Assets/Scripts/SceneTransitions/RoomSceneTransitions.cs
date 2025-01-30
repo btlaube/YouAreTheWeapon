@@ -20,7 +20,6 @@ public class RoomSceneTransitions : MonoBehaviour
 
     public void LoadScene(int scene)
     {
-        Debug.Log("Fart");
         if (levelLoader != null) levelLoader.LoadScene(scene);
     }
 }

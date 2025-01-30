@@ -8150,7 +8150,7 @@ Transform:
   m_GameObject: {fileID: 576504962650271103}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.25, z: 0}
+  m_LocalPosition: {x: 0, y: 0.25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -8195,7 +8195,7 @@ Transform:
   m_GameObject: {fileID: 1264902099037912028}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.25, z: 0}
+  m_LocalPosition: {x: 0, y: 0.25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -8293,7 +8293,9 @@ MonoBehaviour:
   pathTile: {fileID: 11400000, guid: 7230f7f9efbfe854fac3c77ca2294082, type: 2}
   wallTilemap: {fileID: 8171834046260315958}
   pathTilemap: {fileID: 2250154349201999000}
-  lightPrefab: {fileID: 1087137000483822030, guid: 30bd8d98fdc24a742a65718605c0349e, type: 3}
+  lightPrefab: {fileID: 4445057689056373882, guid: 275db8bb3ab8b3e46b6c8b8861bfd7af, type: 3}
+  enemyPrefab: {fileID: 4882531585088769823, guid: 58a4b9de65ed72b478cf24b9eb7654b2, type: 3}
+  keyPrefab: {fileID: 1603886427355896462, guid: 629a137602338f64485492ff9c8eab80, type: 3}
 --- !u!1 &3588483641337640808
 GameObject:
   m_ObjectHideFlags: 0
@@ -8362,25 +8364,29 @@ Tilemap:
   m_TileMatrixArray:
   - m_RefCount: 0
     m_Data:
-      e00: 1.747e-42
+      e00: 0
       e01: 0
-      e02: -1.6228434e+10
-      e03: -1.6228434e+10
+      e02: -3.7500038
+      e03: -3.7500038
       e10: 0
       e11: 0
-      e12: 6.88e-43
-      e13: 6.88e-43
-      e20: 5.7745064e+21
-      e21: 0.026747465
-      e22: 7.87546e-29
-      e23: 0.000045737135
+      e12: 7.45e-43
+      e13: 7.45e-43
+      e20: 1.2430249e+35
+      e21: 8.2800344e-10
+      e22: 2.5664387e-18
+      e23: -1.8959825e+29
       e30: 4.5905e-41
-      e31: 6.92e-43
-      e32: 6.9e-43
-      e33: 6.9e-43
+      e31: 7.5e-43
+      e32: 7.47e-43
+      e33: 7.48e-43
   m_TileColorArray:
   - m_RefCount: 0
-    m_Data: {r: 1.16212e-40, g: 1.16212e-40, b: 1.16212e-40, a: 1.16212e-40}
+    m_Data: {r: 1.2835e-40, g: 1.2835e-40, b: 1.2835e-40, a: 1.2835e-40}
+  - m_RefCount: 0
+    m_Data: {r: 1.2835e-40, g: 1.2835e-40, b: 1.2835e-40, a: 1.2835e-40}
+  - m_RefCount: 0
+    m_Data: {r: 1.2835e-40, g: 1.2835e-40, b: 1.2835e-40, a: 1.2835e-40}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}

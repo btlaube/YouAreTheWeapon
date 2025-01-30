@@ -23,6 +23,20 @@ public class LevelLoader : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    void Update()
+    {
+        // DEBUG: Testing purposes
+        if (Input.GetKeyDown(KeyCode.L)) // Press 'L' to trigger 
+        {
+            ActivateTransition(0);
+        }
+    }
+
+    public void ResetScene()
+    {
+        LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
     public void LoadScene(int sceneToLoad) {
         StartCoroutine(LoadLevel(sceneToLoad));
     }
@@ -33,6 +47,29 @@ public class LevelLoader : MonoBehaviour
         yield return new WaitForSeconds(transitionTime);
 
         SceneManager.LoadScene(levelIndex);
+
+        transition.SetTrigger("End");
+    }
+
+    public void StartTransition()
+    {
+        transition.SetTrigger("Start");
+    }
+
+    public void EndTransition()
+    {
+        transition.SetTrigger("End");
+    }
+
+    public void ActivateTransition(int transitionIndex)
+    {
+        StartCoroutine(Transition(transitionIndex));
+    }
+
+    IEnumerator Transition(int transitionIndex) {
+        transition.SetTrigger("Start");
+
+        yield return new WaitForSeconds(transitionTime);
 
         transition.SetTrigger("End");
     }

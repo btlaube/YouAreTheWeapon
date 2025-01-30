@@ -7,12 +7,33 @@ public class EnemyColliderEventTrigger : MonoBehaviour
 {
     public UnityEvent hitByAttack;
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerStay2D(Collider2D collision)
     {
         switch(collision.tag)
         {
+            case "Player":
+                transform.GetComponent<EnemyBehavior>().PlayerEnteredRange();
+                break;
             default:
                 break;
         }
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        switch(collision.tag)
+        {
+            case "Player":
+                transform.GetComponent<EnemyBehavior>().PlayerEnteredRange();
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void PlayerEnterAttackCollider()
+    {
+        Debug.Log("ahsdkfhsd");
+    }
+
 }

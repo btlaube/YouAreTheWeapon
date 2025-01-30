@@ -22,7 +22,8 @@ public class PlayerController : MonoBehaviour
 
     public Rigidbody2D rb;
     public Animator animator;
-    public SpriteRenderer sr;
+    public SpriteRenderer swordSr;
+    public SpriteRenderer wielderSr;
 
     // Determine player size (by collider)
     private float playerWidth;
@@ -48,13 +49,16 @@ public class PlayerController : MonoBehaviour
 
     // State
     private PlayerState currentState;
+    private AudioHandler audioHandler;
 
     void Awake()
     {
         // Get reference to private components
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-        sr = GetComponent<SpriteRenderer>();
+        swordSr = GetComponent<SpriteRenderer>();
+        wielderSr = transform.GetChild(3).GetComponentInChildren<SpriteRenderer>();
+        audioHandler = GetComponent<AudioHandler>();
 
         // Define playerWidth and playerHeight and offsets from collider
         playerWidth = GetComponent<Collider2D>().bounds.extents.x ;
@@ -71,7 +75,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         maxJumps = 2;
-        sr.flipX = true;
+        FlipSprite(false);
         canMove = true;
 
         controlDict = new Dictionary<string, List<KeyCode>>
@@ -134,6 +138,7 @@ public class PlayerController : MonoBehaviour
         targetVelocityX = speed * input.x;
         float currentVelocityX = rb.velocity.x;
         xVelocity = Mathf.MoveTowards(currentVelocityX, targetVelocityX, accelerationRate * Time.fixedDeltaTime);
+        // xVelocity = targetVelocityX;
 
         // float currentVelocityY = rb.velocity.y;
         // yVelocity = Mathf.MoveTowards(currentVelocityY, targetVelocityY, accelerationRate * Time.fixedDeltaTime);
@@ -141,15 +146,24 @@ public class PlayerController : MonoBehaviour
         // Apply new x and y velocities
         rb.velocity = new Vector2(xVelocity, yVelocity);
 
+        // Running animation speed
+        animator.SetFloat("Speed", Mathf.Abs(rb.velocity.x));
+
         // Flip sprite horizontal movement
         if (rb.velocity.x > 0.0f)
         {
-            sr.flipX = false;
+            FlipSprite(false);
         }
         if (rb.velocity.x < 0.0f)
         {
-            sr.flipX = true;
+            FlipSprite(true);
         }
+    }
+
+    public void FlipSprite(bool flip)
+    {
+        swordSr.flipX = flip;
+        wielderSr.flipX = flip;
     }
 
     private void HandleStateTransitions()
