@@ -42,17 +42,6 @@ public class MazeGenerator : MonoBehaviour
         // wallTilemap = GetComponent<Tilemap>();
     }
 
-    void Update()
-    {
-        // DEBUG: Testing purposes
-        if (Input.GetKeyDown(KeyCode.P)) // Press 'P' to trigger 
-        {
-            Debug.Log("Finding path...");
-            DebugPath(new Vector2Int(6, 6), new Vector2Int(2, 2));
-        }
-
-    }
-
     public void DebugPath(Vector2Int start, Vector2Int target)
     {
         List<Vector2Int> path = FindPath(start, target);

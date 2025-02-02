@@ -11,10 +11,14 @@ public class PlayerAttack : MonoBehaviour
     public List<KeyCode> attackKeys;
     public GameObject attackPrefab;
     private SpriteRenderer sr;
+    private AudioHandler audioHandler;
+    private Animator animator;
 
     void Awake()
     {
         sr = GetComponent<SpriteRenderer>();
+        audioHandler = GetComponent<AudioHandler>();
+        animator = GetComponent<Animator>();
     }
 
     void Start()
@@ -33,6 +37,8 @@ public class PlayerAttack : MonoBehaviour
         if (IsAnyKeyDown(attackKeys) && !hasAttacked)
         {
             Debug.Log("Attack!");
+            audioHandler.Play("Attack");
+            animator.SetTrigger("Attack");
             StartCoroutine(Attack());
             hasAttacked = true;
         }

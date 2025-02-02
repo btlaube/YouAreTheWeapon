@@ -15,11 +15,13 @@ public class DungeonManager : MonoBehaviour
     private Camera mCamera;
 
     private Transform player;
+    private AudioHandler AudioHandler;
 
     void Awake()
     {
         player = GameObject.Find("Player").transform;
         dungeonGenerator = GetComponentInChildren<RecursiveGenerator>();
+        AudioHandler = GetComponent<AudioHandler>();
         mCamera = Camera.main;
     }
 
@@ -35,27 +37,11 @@ public class DungeonManager : MonoBehaviour
         Vector2Int roomVector = GetPlayerCurrentDungeonRoom();
         int progress = roomVector.x + roomVector.y;
         if (progressText != null) progressText.text = $"{progress} / {dungeonGenerator.numRooms - 1}";
-        
-        // DEBUG: Testing purposes clear rooms
-        if (Input.GetKeyDown(KeyCode.R)) // Press 'R' to trigger regeneration
-        {
-            dungeonGenerator.Regenerate();
-        }
-        
-        if (Input.GetKeyDown(KeyCode.T)) // Press 'T' to trigger delete room door
-        {
-            Debug.Log(GetPlayerCurrentDungeonRoom());
-
-        }
-
-        if (Input.GetKeyDown(KeyCode.D)) // Press 'D' to trigger debug roomMap
-        {
-            dungeonGenerator.DebugRoomMap();
-        }
     }
 
     public void RemoveCurrentRoomExitDoor()
     {
+        AudioHandler.Play("Door Open");
         // Get current room via mCamera position
         Vector2Int currentRoomPos = GetPlayerCurrentDungeonRoom();
         Debug.Log($"cam pos: {mCamera.transform.position}, room position: {currentRoomPos}");

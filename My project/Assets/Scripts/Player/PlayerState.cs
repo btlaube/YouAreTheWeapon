@@ -6,11 +6,13 @@ public abstract class PlayerState
 {
     protected PlayerController playerController;
     protected Animator playerAnimator;
+    protected AudioHandler playerAudio;
 
     protected PlayerState(PlayerController controller)
     {
         playerController = controller;
         playerAnimator = playerController.GetAnimator();
+        playerAudio = playerController.GetAudioHandler();
     }
 
     public abstract void Enter();
@@ -130,6 +132,7 @@ public class JumpingState : PlayerState
     {
         // Debug.Log("Enter Jumping");
         playerAnimator.SetBool("IsJumping", true);
+        playerAudio.Play("Jump");
         playerController.Jump();
     }
 
@@ -155,6 +158,7 @@ public class WallJumpingState : PlayerState
     {
         // Debug.Log("Enter WallJumping");
         playerAnimator.SetBool("IsJumping", true);
+        playerAudio.Play("Jump");
         playerController.WallJump();
     }
 

@@ -127,6 +127,7 @@ GameObject:
   - component: {fileID: 1065352143112582662}
   - component: {fileID: 2588392924168411374}
   - component: {fileID: 881652898080723748}
+  - component: {fileID: 2304978637149904478}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -363,7 +364,7 @@ MonoBehaviour:
   - {x: 0.625, y: -0.875, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: -410420
+  m_InstanceId: 357714
   m_LocalBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.625, y: 0.875, z: 0}
@@ -522,21 +523,21 @@ MonoBehaviour:
     playOnAwake: 0
     source: {fileID: 0}
   - name: Jump
-    clip: {fileID: 0}
+    clip: {fileID: 8300000, guid: 1826542121f765e4ab74d904e2ffa6a8, type: 3}
     volume: 1
     pitch: 1
     loop: 0
     playOnAwake: 0
     source: {fileID: 0}
   - name: Attack
-    clip: {fileID: 0}
+    clip: {fileID: 8300000, guid: a47036b6d1a46f643bed8a081164aef7, type: 3}
     volume: 1
     pitch: 1
     loop: 0
     playOnAwake: 0
     source: {fileID: 0}
   - name: Damaged
-    clip: {fileID: 0}
+    clip: {fileID: 8300000, guid: 7cf99b2319c876b4bb41c39f0e4d6ad1, type: 3}
     volume: 1
     pitch: 1
     loop: 0
@@ -549,6 +550,33 @@ MonoBehaviour:
     loop: 0
     playOnAwake: 0
     source: {fileID: 0}
+  - name: Collect Coin
+    clip: {fileID: 8300000, guid: 7409f74256abbf948b0cd47f48560f95, type: 3}
+    volume: 0.5
+    pitch: 1
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  - name: Collect Key
+    clip: {fileID: 8300000, guid: d5809332b45c8d046b5acfedc97c2c02, type: 3}
+    volume: 0.5
+    pitch: 0.66
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+--- !u!114 &2304978637149904478
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6070321365732187746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a169e7c892b7484999e2b306211fd53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  coins: 0
 --- !u!1 &6355463009542369474
 GameObject:
   m_ObjectHideFlags: 0

@@ -306,6 +306,11 @@ public class PlayerController : MonoBehaviour
         return animator;
     }
 
+    public AudioHandler GetAudioHandler()
+    {
+        return audioHandler;
+    }
+
     public float GetJumpDuration()
     {
         return jumpDuration;

@@ -14,10 +14,12 @@ public class EnemyBehavior : MonoBehaviour
     public List<KeyCode> attackKeys;
     public GameObject attackPrefab;
     private SpriteRenderer sr;
+    private Animator animator;
 
     void Awake()
     {
         sr = GetComponent<SpriteRenderer>();
+        animator = GetComponent<Animator>();
         player = GameObject.Find("Player").transform;
     }
 
@@ -68,7 +70,7 @@ public class EnemyBehavior : MonoBehaviour
 
     public IEnumerator Attack()
     {
-
+        animator.SetTrigger("Attack");
         // Move attack to left or right of player
         GameObject attackObject = Instantiate(attackPrefab, transform.position, Quaternion.identity);
         // attackObject.transform.localPosition += (sr.flipX ? new Vector3(-1, 0.5f, 0) : new Vector3(1, 0.5f, 0));

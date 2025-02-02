@@ -27,9 +27,12 @@ public class PlayerHealth : MonoBehaviour
     private bool swordDead;
     private bool wielderDead;
 
+    private AudioHandler audioHandler;
+
     private void Awake()
     {
         playerAnimator = GetComponent<Animator>();
+        audioHandler = GetComponent<AudioHandler>();
 
         swordCurrentHealth = swordStartingHealth;
         // wielderCurrentHealth = wielderStartingHealth;
@@ -109,6 +112,7 @@ public class PlayerHealth : MonoBehaviour
         {
             if (!swordDead)
             {
+                audioHandler.Play("Died");
                 // Enact sword death
                 swordDead = true;
                 SwordDeath();
@@ -128,6 +132,7 @@ public class PlayerHealth : MonoBehaviour
         {
             if (!wielderDead)
             {
+                audioHandler.Play("Died");
                 // Enact wielder death
                 wielderDead = true;
                 WielderDeath();
