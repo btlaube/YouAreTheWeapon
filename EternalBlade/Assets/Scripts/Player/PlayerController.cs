@@ -41,6 +41,8 @@ public class PlayerController : MonoBehaviour
     public int maxJumps;
     private bool isJumping;
     public bool shouldJump;
+    public float saveJumpThreshold;
+    private float saveJumpTimer;
 
     public bool hasWallCling;
     public bool hasDoubleJump;
@@ -100,6 +102,15 @@ public class PlayerController : MonoBehaviour
 
         //Update state
         currentState.Update();
+
+        if (shouldJump)
+        {
+            saveJumpTimer += Time.fixedDeltaTime;
+        }
+        if (saveJumpTimer > saveJumpThreshold)
+        {
+            shouldJump = false;
+        }
     }
 
     void FixedUpdate()
@@ -115,9 +126,10 @@ public class PlayerController : MonoBehaviour
         input.z = IsAnyKeyDown("Jump") ? 1 : 0;
         if(!canMove) input = Vector3.zero;
 
-        if ((input.y > 0 || input.z > 0))
+        if ((input.y > 0 || input.z > 0) && !shouldJump)
         {
             shouldJump = true;
+            saveJumpTimer = 0.0f;
         }
     }
 
