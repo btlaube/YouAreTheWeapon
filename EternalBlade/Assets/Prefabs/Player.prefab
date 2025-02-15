@@ -293,7 +293,7 @@ MonoBehaviour:
   speed: 7
   acceleration: 20
   airAcceleration: 10
-  jump: {x: 1, y: 7}
+  jump: {x: 1, y: 9}
   jumpDurationThreshold: 0.5
   groundCheckEdgeOffset: 0.01
   groundCheck: {fileID: 1216155684268446484}
@@ -304,8 +304,8 @@ MonoBehaviour:
   groundWallLayer:
     serializedVersion: 2
     m_Bits: 256
-  regGravityScale: 1
-  wallClingGravityScale: 0.01
+  regGravityScale: 2
+  wallClingGravityScale: 0.5
   jumpDuration: 0
   rb: {fileID: 0}
   animator: {fileID: 0}
@@ -314,6 +314,7 @@ MonoBehaviour:
   currentJumps: 0
   maxJumps: 2
   shouldJump: 0
+  saveJumpThreshold: 0.3
   hasWallCling: 1
   hasDoubleJump: 1
   canMove: 0
@@ -364,7 +365,7 @@ MonoBehaviour:
   - {x: 0.625, y: -0.875, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: -96222
+  m_InstanceId: -302328
   m_LocalBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.625, y: 0.875, z: 0}
@@ -412,7 +413,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1065352143112582662}
         m_TargetAssemblyTypeName: PlayerHealth, Assembly-CSharp
-        m_MethodName: TakeWielderDamage
+        m_MethodName: TakeSwordDamage
         m_Mode: 4
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -25,6 +25,9 @@ public class WielderStats : MonoBehaviour
     [SerializeField] private PlayerController playerController;
     [SerializeField] private PlayerAttack playerAttack;
     [SerializeField] private PlayerHealth playerHealth;
+    
+    // Animator
+    private Animator playerAnimator;
 
     public int randomizeStats;
 
@@ -34,18 +37,10 @@ public class WielderStats : MonoBehaviour
         playerController = transform.parent.GetComponent<PlayerController>();
         playerAttack = transform.parent.GetComponent<PlayerAttack>();
         playerHealth = transform.parent.GetComponent<PlayerHealth>();
-        // if (randomizeStats == 1)
-        // {
-        //     InitializeStats();
-        // }
-        // else
-        // {
-        //     LoadStats();
-        // }
-        // ApplyStats();
-        // UpdateStatDisplay();
-    }
 
+        playerAnimator = transform.parent.GetComponent<Animator>();
+    }
+    
     public void InitializePreviousWielder()
     {
         LoadStats();
@@ -66,6 +61,14 @@ public class WielderStats : MonoBehaviour
         attackSpeed = Random.Range(1, 6);
         maxHealth = Random.Range(4, 7);
         startingHealth = Random.Range(maxHealth - 2, maxHealth + 1);
+    }
+
+    public void SetStats(int movement, int attackSpeed, int maxHealth, int startingHealth)
+    {
+        this.movement = movement;
+        this.attackSpeed = attackSpeed;
+        this.maxHealth = maxHealth;
+        this.startingHealth = startingHealth;
     }
 
     public void ApplyStats()

@@ -61,12 +61,12 @@ public class PlayerHealth : MonoBehaviour
             GainSwordHealth(1f);
             TakeWielderDamage(1f);
         }
-        if (IsAnyKeyDown(healWielderKeys) && wielderCurrentHealth != wielderMaxHealth && swordCurrentHealth != 1)
-        {
-            Debug.Log("Heal wielder!");
-            GainWielderHealth(1f);
-            TakeSwordDamage(1f);
-        }
+        // if (IsAnyKeyDown(healWielderKeys) && wielderCurrentHealth != wielderMaxHealth && swordCurrentHealth != 1)
+        // {
+        //     Debug.Log("Heal wielder!");
+        //     GainWielderHealth(1f);
+        //     TakeSwordDamage(1f);
+        // }
     }
 
     public void FullHealSword()

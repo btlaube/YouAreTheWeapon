@@ -37,11 +37,6 @@ public class MazeGenerator : MonoBehaviour
     public GameObject enemyPrefab;
     public GameObject keyPrefab;
 
-    void Awake()
-    {
-        // wallTilemap = GetComponent<Tilemap>();
-    }
-
     public void DebugPath(Vector2Int start, Vector2Int target)
     {
         List<Vector2Int> path = FindPath(start, target);
@@ -87,27 +82,30 @@ public class MazeGenerator : MonoBehaviour
         int offsetX = -roomWidth / 2;
         int offsetY = -roomHeight / 2;
 
-        for (int x = 0; x < expandedCols - 1; x++) // -1 from expandedCols here removes last wall for uneven room size at right side of maze
+        for (int x = 0; x < expandedCols + 3; x++) // -1 from expandedCols here removes last wall for uneven room size at right side of maze
         {
             for (int y = 0; y < expandedRows; y++)
             {
                 // Determine if the current tile is a wall or part of a path
                 if (x % 4 == 0 || y % 4 == 0)
                 {
-                    // Walls are on every 4th row/column
-                    // Apply the offset to align the platforms with the walls and floor
-                    int tileX = x + offsetX;
-                    int tileY = y + offsetY;
+                    if (x < expandedCols - 1 || (y == expandedRows-1 || y == 0))
+                    {
+                        // Walls are on every 4th row/column
+                        // Apply the offset to align the platforms with the walls and floor
+                        int tileX = x + offsetX;
+                        int tileY = y + offsetY;
 
-                    wallTilemap.SetTile(new Vector3Int(tileX, tileY, 0), wallTile); // Place a path tile on the background
+                        wallTilemap.SetTile(new Vector3Int(tileX, tileY, 0), wallTile); // Place a path tile on the backgroun
+                    }
                 }
                 else
                 {
                     // Draw path on background
-                    int tileX = x + offsetX;
-                    int tileY = y + offsetY;
+                    // int tileX = x + offsetX;
+                    // int tileY = y + offsetY;
 
-                    pathTilemap.SetTile(new Vector3Int(tileX, tileY, 0), pathTile); // Place a path tile on the background
+                    // pathTilemap.SetTile(new Vector3Int(tileX, tileY, 0), pathTile); // Place a path tile on the background
                 }
             }
         }

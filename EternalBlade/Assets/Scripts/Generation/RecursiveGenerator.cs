@@ -124,8 +124,7 @@ public class RecursiveGenerator : MonoBehaviour
             // Horizontal exit has more possible exit options
         if (roomEntryOrExit.x == 0) // Up and down options
         {
-            // offset = Random.Range(0, 10);
-            offset = 8;
+            offset = Random.Range(0, 9);
         }
         else // Right exit option
         {

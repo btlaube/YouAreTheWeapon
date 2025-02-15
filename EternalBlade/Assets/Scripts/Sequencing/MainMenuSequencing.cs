@@ -26,12 +26,13 @@ public class MainMenuSequencing : MonoBehaviour
         Debug.Log("Start button sequence");
         // Set swpawn wielder to true
         PlayerPrefs.SetInt("SpawnWielder", 0);
-        PlayerPrefs.SetInt("ShowWielder", 0);
+        PlayerPrefs.SetInt("ShowWielder", 1);
         PlayerPrefs.Save();
 
         // TODO: Add option check for skip intro scene
         // if (!skip intro scene)
-        StartCoroutine(StartButtonCoroutine());
+        // StartCoroutine(StartButtonCoroutine());
+        LevelLoader.instance.LoadScene(1);
     }
 
     public IEnumerator StartButtonCoroutine()

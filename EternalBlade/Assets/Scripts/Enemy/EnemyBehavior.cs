@@ -77,6 +77,7 @@ public class EnemyBehavior : MonoBehaviour
         // Attack toward player
         float lookDirection = transform.localScale.x < 0.0f ? -1.0f : 1.0f;
         attackObject.GetComponent<Rigidbody2D>().velocity = new Vector2(10f * lookDirection, 0f);
+        attackObject.transform.localScale = new Vector3(lookDirection, 1.0f, 1.0f);
 
         yield return new WaitForSeconds(5f);
 

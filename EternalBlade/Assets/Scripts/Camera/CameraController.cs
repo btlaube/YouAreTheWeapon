@@ -51,7 +51,6 @@ public class CameraController : MonoBehaviour
             playerPosition.y < bottomBorder || playerPosition.y > topBorder)
         {
             MoveCameraToNearestPosition(playerPosition);
-            Debug.Log(playerPosition);
         }
     }
 
@@ -82,7 +81,6 @@ public class CameraController : MonoBehaviour
 
     public void ClearCameraPositions()
     {
-        Debug.Log("Clear camera pos");
         cameraPositions.Clear();
     }
 
