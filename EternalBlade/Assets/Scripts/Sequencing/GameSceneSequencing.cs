@@ -104,7 +104,7 @@ public class GameSceneSequencing : MonoBehaviour
             gameOverCanvas.enabled = false;
             gameCanvas.enabled = true;
             player.GetComponent<Animator>().SetBool("HasSword", true);
-            if (player != null) player.position = new Vector2(0.75f, -7.25f);
+            if (player != null) player.position = new Vector2(0.75f, -8.7f);
             player.GetComponentInChildren<WielderStats>().InitializePreviousWielder();
             wielderManager.UpdateWielderAnimator();
             // Hide sword

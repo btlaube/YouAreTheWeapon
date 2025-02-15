@@ -172,6 +172,7 @@ public class PlayerHealth : MonoBehaviour
     public void SwordDeath()
     {
         Debug.Log("Sword Breaker!");
+        playerAnimator.SetTrigger("Die");
         // Display sacrifice wielder option
         swordBreakEvent.Invoke();
     }
