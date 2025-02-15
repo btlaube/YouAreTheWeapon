@@ -24,6 +24,7 @@ public class PlayerController : MonoBehaviour
     public Animator animator;
     public SpriteRenderer swordSr;
     public SpriteRenderer wielderSr;
+    public ParticleSystem jumpParticles;
 
     // Determine player size (by collider)
     private float playerWidth;

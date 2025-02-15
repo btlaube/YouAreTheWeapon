@@ -20,6 +20,7 @@ public class GameSceneSequencing : MonoBehaviour
     private int numSacrifices;
 
     private WielderManager wielderManager;
+    private AudioHandler audioHandler;
 
     // Check for num sacrifices
     // 0 sacrifices, show fully healed altar, show 3 wielder stats to choose from
@@ -38,6 +39,7 @@ public class GameSceneSequencing : MonoBehaviour
     {
         player = GameObject.Find("Player").transform;
         wielderManager = GameObject.Find("WielderManager").GetComponent<WielderManager>();
+        audioHandler = GetComponent<AudioHandler>();
     }
 
     void Start()
@@ -228,6 +230,7 @@ public class GameSceneSequencing : MonoBehaviour
         yield return new WaitForSeconds(1f);
         // Replace with return to previous start room
         dungeonClearedCanvas.GetComponent<Canvas>().enabled = true;
+        audioHandler.Play("Dungeon Clear");
         Debug.Log("Finished Dungeon Cleared Sequence");
     }
 
@@ -259,6 +262,7 @@ public class GameSceneSequencing : MonoBehaviour
         yield return new WaitForSeconds(1f);
         // Replace with return to previous start room
         swordDeathCanvas.GetComponent<Canvas>().enabled = true;
+        audioHandler.Play("Sword Break");
         Debug.Log("Finished sword death sequence");
     }
 

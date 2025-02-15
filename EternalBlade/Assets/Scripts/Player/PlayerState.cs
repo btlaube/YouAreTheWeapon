@@ -133,6 +133,7 @@ public class JumpingState : PlayerState
         // Debug.Log("Enter Jumping");
         playerAnimator.SetBool("IsJumping", true);
         playerAudio.Play("Jump");
+        playerController.jumpParticles.Play();
         playerController.Jump();
     }
 

@@ -5,9 +5,11 @@ using UnityEngine;
 public class CameraShake : MonoBehaviour
 {
 
+    public Vector2 defaultDurationAndMagnitude;
+
     public void ShakeScreen()
     {
-        StartCoroutine(Shake(0.1f, 0.125f));
+        StartCoroutine(Shake(defaultDurationAndMagnitude.x, defaultDurationAndMagnitude.y));
     }
 
     public IEnumerator Shake(float duration, float magnitude) {
