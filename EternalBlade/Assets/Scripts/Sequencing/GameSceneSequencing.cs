@@ -52,18 +52,6 @@ public class GameSceneSequencing : MonoBehaviour
         spawnNewWielder = PlayerPrefs.GetInt("SpawnWielder", 0);
         newWielderVisual = PlayerPrefs.GetInt("ShowWielder", 0);
         StartWakeSequence();
-
-        // gameOverCanvas.enabled = false;
-        // wielderStatsCanvas.enabled = true;
-        // if (numSacrifices == 3)
-        // {
-        //     wielderStatsCanvas.enabled = false;
-        //     gameOverCanvas.enabled = true;
-        // }
-        // // Hide canvas
-        // gameCanvas.enabled = false;
-        // // "Hide" player
-        // if (player != null) player.position = new Vector2(-100, 0);
     }
 
     public void ClearSacrifices()
@@ -84,9 +72,6 @@ public class GameSceneSequencing : MonoBehaviour
         player.GetComponent<Animator>().SetBool("HasSword", false);
         if (newWielderVisual == 1) 
         {
-            // Set spawn wielder to false
-            // PlayerPrefs.SetInt("SpawnWielder", 0);
-            // PlayerPrefs.Save();
             gameOverCanvas.enabled = false;
             wielderStatsCanvas.enabled = true;
             if (numSacrifices == 3)
@@ -98,7 +83,6 @@ public class GameSceneSequencing : MonoBehaviour
             gameCanvas.enabled = false;
             // "Hide" player
             if (player != null) player.position = new Vector2(-100, 0);
-            // StartCoroutine(WakeSequence());
         }
         else
         {
@@ -112,13 +96,6 @@ public class GameSceneSequencing : MonoBehaviour
             // Hide sword
             Destroy(sword.gameObject);
         }
-        // Set spawn wielder to false
-        // PlayerPrefs.SetInt("SpawnWielder", 0);
-        // PlayerPrefs.Save();
-        // StartCoroutine(WakeSequence());
-        // New player stats
-        // player.GetComponentInChildren<WielderStats>().InitializeNewWielder();
-        // Previous player stats
     }
 
     public void StartWielderSelected()
@@ -139,6 +116,7 @@ public class GameSceneSequencing : MonoBehaviour
         if (player != null) player.position = new Vector2(-10, -9);
         player.GetComponent<Animator>().SetBool("HasSword", false);
         player.GetComponent<PlayerController>().enabled = false;
+        player.GetComponent<PlayerAttack>().enabled = false;
         // wait
         yield return new WaitForSeconds(1f);
         // Fade in
@@ -153,6 +131,7 @@ public class GameSceneSequencing : MonoBehaviour
         if (player != null) player.position = new Vector2(0.75f, -7.25f);
         player.GetComponent<Animator>().SetBool("HasSword", true);
         player.GetComponent<PlayerController>().enabled = true;
+        player.GetComponent<PlayerAttack>().enabled = true;
         // Hide sword
         Destroy(sword.gameObject);
         // show canvas
@@ -277,11 +256,13 @@ public class GameSceneSequencing : MonoBehaviour
         PlayerPrefs.SetInt("Sacrifices", numSacrifices);
         wielderManager.SacrificeCurrentWielder();
         PlayerPrefs.Save();
-        // LevelLoader.instance.EndTransition();
         swordDeathCanvas.GetComponent<Canvas>().enabled = false;
         // Sacrificing wielder fully heals sword
         player.GetComponent<PlayerHealth>().FullHealSword();
-        yield return new WaitForSeconds(0.1f);
+        player.GetComponent<PlayerHealth>().FullDamageWielder();
+        player.GetComponent<PlayerHealth>().playerAnimator.SetTrigger("Sacrifice");
+        // LevelLoader.instance.EndTransition();
+        yield return new WaitForSeconds(2f);
         StartCoroutine(WielderDeathSequence());
     }
 

@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour
     public SpriteRenderer swordSr;
     public SpriteRenderer wielderSr;
     public ParticleSystem jumpParticles;
+    public ParticleSystem wallJumpParticles;
 
     // Determine player size (by collider)
     private float playerWidth;
@@ -175,6 +176,8 @@ public class PlayerController : MonoBehaviour
     {
         swordSr.flipX = flip;
         wielderSr.flipX = flip;
+        // float multiplier = flip ? -1.0f : 1.0f;
+        // transform.localScale = new Vector3(multiplier, 1.0f, 1.0f);
     }
 
     private void HandleStateTransitions()

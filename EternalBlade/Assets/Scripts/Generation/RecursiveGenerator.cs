@@ -22,6 +22,7 @@ public class RecursiveGenerator : MonoBehaviour
     public TileBase horiDoorTile;
 
     public GameObject doorLightPrefab;
+    public GameObject doorParticles;
 
     private Camera mCamera;
 
@@ -294,61 +295,6 @@ public class RecursiveGenerator : MonoBehaviour
         bool hasTopExit = room.exitPoint == new Vector2Int(0, 1);
 
         StartCoroutine(AnimateExitDoor(room, tilemap, hasRightExit, hasBottomExit, hasTopExit));
-
-
-        // Offset to move the tiles to the bottom-left corner
-        // int offsetX = -roomWidth / 2;
-        // int offsetY = -roomHeight / 2;
-
-        // Add tiles to the tilemap based on the presence of walls/floors/ceilings
-        // for (int x = 0; x <= roomWidth; x++)
-        // {
-        //     for (int y = 0; y <= roomHeight; y++)
-        //     {
-        //         // Adjust the position with the offset
-        //         int tileX = x + offsetX;
-        //         int tileY = y + offsetY;
-
-        //         // Right exit
-        //         if (hasRightExit && x == roomWidth - 1)
-        //         {
-        //             if (y <= (room.exitPointOffset * 4) || y >= ((room.exitPointOffset * 4) + 4))
-        //             {
-        //                 // Nothing here
-        //             }
-        //             else
-        //             {
-        //                 tilemap.SetTile(new Vector3Int(tileX, tileY, 0), null); // Clear door tiles
-        //             }
-        //         }
-
-        //         // Bottom exit
-        //         if (hasBottomExit && y == 0)
-        //         {
-        //             if (x <= (room.exitPointOffset * 4) || x >= ((room.exitPointOffset * 4) + 4))
-        //             {
-        //                 // Nothing here
-        //             }
-        //             else
-        //             {
-        //                 tilemap.SetTile(new Vector3Int(tileX, tileY, 0), null);  // Clear door tiles
-        //             }
-        //         }
-
-        //         // Top exit
-        //         if (hasTopExit && y == roomHeight - 1)
-        //         {
-        //             if (x <= (room.exitPointOffset * 4) || x >= ((room.exitPointOffset * 4) + 4))
-        //             {
-        //                 tilemap.SetTile(new Vector3Int(tileX, tileY, 0), floorTile);
-        //             }
-        //             else
-        //             {
-        //                 tilemap.SetTile(new Vector3Int(tileX, tileY, 0), null);  // Clear door tiles
-        //             }
-        //         }
-        //     }
-        // }
     }
 
     public IEnumerator AnimateExitDoor(Room room, Tilemap tilemap, bool hasRightExit, bool hasBottomExit, bool hasTopExit)
@@ -361,17 +307,41 @@ public class RecursiveGenerator : MonoBehaviour
         // Offset to move the tiles to the bottom-left corner
         Vector2Int offset = new Vector2Int(-roomWidth / 2, -roomHeight / 2);
 
+        // Adjust the position with the offset
+        float tileX = 0.0f;
+        float tileY = 0.0f;
+        if (hasRightExit)
+        {
+            tileX = (roomWidth - 0.775f) + offset.x;
+            tileY = ((room.exitPointOffset * 4) + 4.5f) + offset.y;
+        }
+        if (hasBottomExit)
+        {
+            tileX = ((room.exitPointOffset * 4) + 4) + offset.x;
+            tileY = offset.y;
+        }
+        if (hasTopExit)
+        {
+            tileX = ((room.exitPointOffset * 4) + 4) + offset.x;
+            tileY = roomHeight + offset.y;
+        }
+        Instantiate(doorParticles, 
+                new Vector3(room.instance.transform.position.x + tileX, 
+                            room.instance.transform.position.y + tileY, 
+                            room.instance.transform.position.z), 
+                Quaternion.Euler(90, 0, 0),
+                room.instance.transform);
+
         for (int i = 1; i < 4; i++)
         {
             if (hasRightExit)
             {
-                Debug.Log($"Removign door tile at: ({(roomWidth - 1) + offset.x}, {((room.exitPointOffset * 4) + i) + offset.y}");
                 tilemap.SetTile(new Vector3Int((roomWidth - 1) + offset.x, ((room.exitPointOffset * 4) + i) + offset.y, 0), null);  // Clear door tiles
                 yield return new WaitForSeconds(0.55f);
             }
             if (hasBottomExit)
             {
-                tilemap.SetTile(new Vector3Int(((room.exitPointOffset * 4) + i) + offset.x, 0 + offset.y, 0), null);  // Clear door tiles
+                tilemap.SetTile(new Vector3Int(((room.exitPointOffset * 4) + i) + offset.x, offset.y, 0), null);  // Clear door tiles
                 yield return new WaitForSeconds(0.55f);
             }
             if (hasTopExit)

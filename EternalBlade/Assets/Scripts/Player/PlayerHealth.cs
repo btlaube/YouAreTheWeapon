@@ -73,6 +73,11 @@ public class PlayerHealth : MonoBehaviour
     {
         SetSwordStartingHealth(swordMaxHealth);
     }
+
+    public void FullDamageWielder()
+    {
+        TakeWielderDamage(wielderCurrentHealth);
+    }
     
     public void SaveSwordHealth()
     {

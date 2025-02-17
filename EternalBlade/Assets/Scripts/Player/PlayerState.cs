@@ -160,6 +160,7 @@ public class WallJumpingState : PlayerState
         // Debug.Log("Enter WallJumping");
         playerAnimator.SetBool("IsJumping", true);
         playerAudio.Play("Jump");
+        playerController.wallJumpParticles.Play();
         playerController.WallJump();
     }
 
