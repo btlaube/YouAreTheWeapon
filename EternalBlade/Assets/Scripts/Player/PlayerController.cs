@@ -4,22 +4,33 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Movement")]
     public float speed = 14f;
     public float acceleration;
     public float airAcceleration;
     public Vector2 jump;
     public float jumpDurationThreshold;
+    public float regGravityScale;
+    public float wallClingGravityScale;
+    public int currentJumps;
+    public int maxJumps;
+    private bool isJumping;
+    public bool shouldJump;
+    public float saveJumpThreshold;
+    private float saveJumpTimer;
+    public bool hasWallCling;
+    public bool hasDoubleJump;
+    public bool canMove;
+
+    [Header("Collisions")]
     public float groundCheckEdgeOffset;
     public Transform groundCheck;
     public float groundCheckRadius;
     public LayerMask groundLayer;
     public LayerMask groundWallLayer;
-    public float regGravityScale;
-    public float wallClingGravityScale;
 
-    private Vector3 input;
-    [SerializeField] private float jumpDuration;
 
+    [Header("Components")]
     public Rigidbody2D rb;
     public Animator animator;
     public SpriteRenderer swordSr;
@@ -39,17 +50,8 @@ public class PlayerController : MonoBehaviour
     private float targetVelocityX;
     private float targetVelocityY;
 
-    public int currentJumps;
-    public int maxJumps;
-    private bool isJumping;
-    public bool shouldJump;
-    public float saveJumpThreshold;
-    private float saveJumpTimer;
-
-    public bool hasWallCling;
-    public bool hasDoubleJump;
-
-    public bool canMove;
+    private Vector3 input;
+    private float jumpDuration;
 
     // State
     private PlayerState currentState;
@@ -145,15 +147,10 @@ public class PlayerController : MonoBehaviour
         yVelocity = rb.velocity.y;
 
         // Apply physics to x and y velocites
-    
         // Smoothly apply horizontal movment to xVelocity towards the target velocity
         targetVelocityX = speed * input.x;
         float currentVelocityX = rb.velocity.x;
         xVelocity = Mathf.MoveTowards(currentVelocityX, targetVelocityX, accelerationRate * Time.fixedDeltaTime);
-        // xVelocity = targetVelocityX;
-
-        // float currentVelocityY = rb.velocity.y;
-        // yVelocity = Mathf.MoveTowards(currentVelocityY, targetVelocityY, accelerationRate * Time.fixedDeltaTime);
 
         // Apply new x and y velocities
         rb.velocity = new Vector2(xVelocity, yVelocity);

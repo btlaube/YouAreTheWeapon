@@ -35,6 +35,7 @@ public class DungeonManager : MonoBehaviour
     void Update()
     {
         Vector2Int roomVector = GetPlayerCurrentDungeonRoom();
+        Debug.Log(roomVector);
         int progress = roomVector.x + roomVector.y;
         if (progressText != null) progressText.text = $"{progress} / {dungeonGenerator.numRooms - 1}";
     }
@@ -44,13 +45,25 @@ public class DungeonManager : MonoBehaviour
         AudioHandler.Play("Door Open");
         // Get current room via mCamera position
         Vector2Int currentRoomPos = GetPlayerCurrentDungeonRoom();
-        Debug.Log($"cam pos: {mCamera.transform.position}, room position: {currentRoomPos}");
         dungeonGenerator.ClearRoomExitDoor(currentRoomPos);
     }
 
     public Vector2Int GetPlayerCurrentDungeonRoom()
     {
-        return new Vector2Int((int)(mCamera.transform.position.x / roomWidth), (int)(mCamera.transform.position.y / roomHeight));
+        Dictionary<Vector2Int, Room> roomMap = dungeonGenerator.GetRoomMap();
+        Room currentRoom = roomMap[new Vector2Int(0, 0)];
+        float minDist = float.MaxValue;
+        foreach (Room room in roomMap.Values)
+        {
+            Vector2 roomPosition = new Vector2(room.position.x * roomWidth, room.position.y * roomHeight);
+            float dist = Vector2.Distance(player.position,  roomPosition);
+            if (dist < minDist)
+            {
+                currentRoom = room;
+                minDist = dist;
+            }
+        }
+        return currentRoom.position;
     }
 
     public Vector2Int GetObjectCurrentMazeRoom(Transform obj)

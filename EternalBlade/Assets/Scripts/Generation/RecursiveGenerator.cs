@@ -12,7 +12,7 @@ public class RecursiveGenerator : MonoBehaviour
     public GameObject startRoomPrefab;
     public GameObject finalRoomPrefab;
 
-    [SerializeField] private Dictionary<Vector2Int, Room> roomMap = new Dictionary<Vector2Int, Room>(); // Map to store rooms by position
+    private Dictionary<Vector2Int, Room> roomMap = new Dictionary<Vector2Int, Room>(); // Map to store rooms by position
 
     [Header("Tiles")]
     public TileBase wallTile;
@@ -49,6 +49,11 @@ public class RecursiveGenerator : MonoBehaviour
 
             Debug.Log($"Position: {position}, Room: {room}");
         }
+    }
+
+    public Dictionary<Vector2Int, Room> GetRoomMap()
+    {
+        return this.roomMap;
     }
 
     public void Generate()

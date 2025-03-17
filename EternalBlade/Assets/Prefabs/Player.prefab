@@ -297,6 +297,15 @@ MonoBehaviour:
   airAcceleration: 10
   jump: {x: 1, y: 9}
   jumpDurationThreshold: 0.5
+  regGravityScale: 2
+  wallClingGravityScale: 0.5
+  currentJumps: 0
+  maxJumps: 2
+  shouldJump: 0
+  saveJumpThreshold: 0.3
+  hasWallCling: 1
+  hasDoubleJump: 1
+  canMove: 0
   groundCheckEdgeOffset: 0.09
   groundCheck: {fileID: 1216155684268446484}
   groundCheckRadius: 0.1
@@ -306,22 +315,12 @@ MonoBehaviour:
   groundWallLayer:
     serializedVersion: 2
     m_Bits: 256
-  regGravityScale: 2
-  wallClingGravityScale: 0.5
-  jumpDuration: 0
   rb: {fileID: 0}
   animator: {fileID: 0}
   swordSr: {fileID: 0}
   wielderSr: {fileID: 8778566102499506884}
   jumpParticles: {fileID: 1746491472101785595}
   wallJumpParticles: {fileID: 4634107456680601174}
-  currentJumps: 0
-  maxJumps: 2
-  shouldJump: 0
-  saveJumpThreshold: 0.3
-  hasWallCling: 1
-  hasDoubleJump: 1
-  canMove: 0
 --- !u!95 &7407147093245040961
 Animator:
   serializedVersion: 5
@@ -369,7 +368,7 @@ MonoBehaviour:
   - {x: 0.625, y: -0.875, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: -1482
+  m_InstanceId: 79262
   m_LocalBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.625, y: 0.875, z: 0}
@@ -563,6 +562,20 @@ MonoBehaviour:
     playOnAwake: 0
     source: {fileID: 0}
   - name: Collect Key
+    clip: {fileID: 8300000, guid: d5809332b45c8d046b5acfedc97c2c02, type: 3}
+    volume: 0.5
+    pitch: 0.66
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  - name: Heal Sword
+    clip: {fileID: 8300000, guid: 6f489c259f7387b4aa60863c46f112ff, type: 3}
+    volume: 0.5
+    pitch: 0.71
+    loop: 0
+    playOnAwake: 0
+    source: {fileID: 0}
+  - name: Damage Wielder
     clip: {fileID: 8300000, guid: d5809332b45c8d046b5acfedc97c2c02, type: 3}
     volume: 0.5
     pitch: 0.66

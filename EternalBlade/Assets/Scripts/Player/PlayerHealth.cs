@@ -58,6 +58,8 @@ public class PlayerHealth : MonoBehaviour
         if (IsAnyKeyDown(healSwordKeys) && swordCurrentHealth != swordMaxHealth && wielderCurrentHealth != 1)
         {
             Debug.Log("Heal sword!");
+            audioHandler.Play("Heal Sword");
+            audioHandler.Play("Damaged");
             GainSwordHealth(1f);
             TakeWielderDamage(1f);
         }
