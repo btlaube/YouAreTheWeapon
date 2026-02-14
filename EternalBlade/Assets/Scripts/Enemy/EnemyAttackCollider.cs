@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class AttackCollider : MonoBehaviour
+public class EnemyAttackCollider : MonoBehaviour
 {
     // public UnityEvent hitEnemy;
     public int attackDamage;
