@@ -8280,11 +8280,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rows: 5
-  cols: 9
+  cols: 10
   cellSize: 1
   roomSize: 3
-  roomHeight: 22
-  roomWidth: 40
+  roomHeight: 21
+  roomWidth: 41
   wallColor: {r: 0, g: 0, b: 0, a: 1}
   pathColor: {r: 1, g: 1, b: 1, a: 1}
   enterance: {x: 0, y: 0}

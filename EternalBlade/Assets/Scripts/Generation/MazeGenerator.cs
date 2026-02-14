@@ -82,22 +82,22 @@ public class MazeGenerator : MonoBehaviour
         int offsetX = -roomWidth / 2;
         int offsetY = -roomHeight / 2;
 
-        for (int x = 0; x < expandedCols + 3; x++) // -1 from expandedCols here removes last wall for uneven room size at right side of maze
+        for (int x = 0; x < expandedCols; x++) // -1 from expandedCols here removes last wall for uneven room size at right side of maze
         {
             for (int y = 0; y < expandedRows; y++)
             {
                 // Determine if the current tile is a wall or part of a path
                 if (x % 4 == 0 || y % 4 == 0)
                 {
-                    if (x < expandedCols - 1 || (y == expandedRows-1 || y == 0))
-                    {
+                    // if (x < expandedCols - 1 && y < expandedRows - 1)
+                    // {
                         // Walls are on every 4th row/column
                         // Apply the offset to align the platforms with the walls and floor
                         int tileX = x + offsetX;
                         int tileY = y + offsetY;
 
-                        wallTilemap.SetTile(new Vector3Int(tileX, tileY, 0), wallTile); // Place a path tile on the backgroun
-                    }
+                        wallTilemap.SetTile(new Vector3Int(tileX, tileY, 0), wallTile); // Place a path tile on the background
+                    // }
                 }
                 else
                 {
@@ -138,7 +138,7 @@ public class MazeGenerator : MonoBehaviour
                             SpawnObjectInRoom(keyPrefab, cell);
                             spawnedKey = true;
                         }
-                        else if (Random.Range(0f, 1f) <= enemyChance && !IsPathBetween(cell, new Vector2Int(cell.x, cell.y - 4)))
+                        else if (Random.Range(0f, 1f) <= enemyChance && !IsPathBetween(cell, new Vector2Int(cell.x, cell.y - 4))) // Only spawn enemies that have a floor below them.
                         {
                             SpawnEnemy(cell);
                         }
@@ -226,7 +226,7 @@ public class MazeGenerator : MonoBehaviour
                         wallTilemap.SetTile(new Vector3Int(tileX, tileY, 0), null);
                     }
                 }
-                // Bottom entry
+                // // Bottom entry
                 if (hasBottomEntry && y == 0)
                 {
                     if (x > (room.entryPointOffset * 4) && x < ((room.entryPointOffset * 4) + 4))
@@ -235,8 +235,8 @@ public class MazeGenerator : MonoBehaviour
                     }
                 }
 
-                // Top entry
-                if (hasTopEntry && y == roomHeight - 2)
+                // // Top entry
+                if (hasTopEntry && y == roomHeight - 1)
                 {
                     if (x > (room.entryPointOffset * 4) && x < ((room.entryPointOffset * 4) + 4))
                     {
@@ -253,7 +253,7 @@ public class MazeGenerator : MonoBehaviour
                     }
                 }
 
-                // Bottom exit
+                // // Bottom exit
                 if (hasBottomExit && y == 0)
                 {
                     if (x > (room.exitPointOffset * 4) && x < ((room.exitPointOffset * 4) + 4))
@@ -262,8 +262,8 @@ public class MazeGenerator : MonoBehaviour
                     }
                 }
 
-                // Top exit
-                if (hasTopExit && y == roomHeight - 2)
+                // // Top exit
+                if (hasTopExit && y == roomHeight - 1)
                 {
                     if (x > (room.exitPointOffset * 4) && x < ((room.exitPointOffset * 4) + 4))
                     {

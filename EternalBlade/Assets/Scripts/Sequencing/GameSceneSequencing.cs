@@ -5,6 +5,10 @@ using TMPro;
 
 public class GameSceneSequencing : MonoBehaviour
 {
+
+    public Vector2 playerStartPosition;
+    public Vector2 playerIntroPosition;
+
     public GameObject swordDeathCanvas;
     public GameObject dungeonClearedCanvas;
     public TMP_Text dungeonClearsText;
@@ -90,7 +94,7 @@ public class GameSceneSequencing : MonoBehaviour
             gameOverCanvas.enabled = false;
             gameCanvas.enabled = true;
             player.GetComponent<Animator>().SetBool("HasSword", true);
-            if (player != null) player.position = new Vector2(0.75f, -8.7f);
+            if (player != null) player.position = playerStartPosition;
             player.GetComponentInChildren<WielderStats>().InitializePreviousWielder();
             wielderManager.UpdateWielderAnimator();
             // Hide sword
@@ -113,7 +117,7 @@ public class GameSceneSequencing : MonoBehaviour
         gameCanvas.enabled = false;
         wielderStatsCanvas.enabled = false;
         // Show Player (no sword)
-        if (player != null) player.position = new Vector2(-10, -9);
+        if (player != null) player.position = playerIntroPosition;
         player.GetComponent<Animator>().SetBool("HasSword", false);
         player.GetComponent<PlayerController>().enabled = false;
         player.GetComponent<PlayerAttack>().enabled = false;
@@ -160,7 +164,7 @@ public class GameSceneSequencing : MonoBehaviour
         gameCanvas.enabled = false;
         wielderStatsCanvas.enabled = false;
         // Show Player (no sword)
-        if (player != null) player.position = new Vector2(-10, -9);
+        if (player != null) player.position = playerIntroPosition;
         // player.GetComponent<SpriteRenderer>().enabled = false;
         player.GetComponent<Animator>().SetBool("HasSword", false);
         // wait
