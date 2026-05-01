@@ -10,6 +10,7 @@ public class EnemyBehavior : MonoBehaviour
     public float attackCooldown;
     private float attackTimer;
     private bool hasAttacked;
+    public Transform attackPoint;
 
     public List<KeyCode> attackKeys;
     public GameObject attackPrefab;
@@ -72,7 +73,7 @@ public class EnemyBehavior : MonoBehaviour
     {
         animator.SetTrigger("Attack");
         // Move attack to left or right of player
-        GameObject attackObject = Instantiate(attackPrefab, transform.position, Quaternion.identity);
+        GameObject attackObject = Instantiate(attackPrefab, attackPoint.position, Quaternion.identity);
         // attackObject.transform.localPosition += (sr.flipX ? new Vector3(-1, 0.5f, 0) : new Vector3(1, 0.5f, 0));
         // Attack toward player
         float lookDirection = transform.localScale.x < 0.0f ? -1.0f : 1.0f;

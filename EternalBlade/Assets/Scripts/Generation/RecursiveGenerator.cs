@@ -149,27 +149,30 @@ public class RecursiveGenerator : MonoBehaviour
             {
                 roomPrefabInstance = Instantiate(startRoomPrefab, new Vector2(room.position.x * roomWidth, room.position.y * roomHeight), Quaternion.identity, transform);
                 room.SetInstance(roomPrefabInstance);
-                Tilemap tilemap = roomPrefabInstance.GetComponentInChildren<Tilemap>();
-                AddTilesToRoom(room, tilemap, wallTile, floorTile);
-                AddExitWallsToRoom(room, tilemap, wallTile, floorTile);
+                // Tilemap tilemap = roomPrefabInstance.GetComponentInChildren<Tilemap>();
+                // AddTilesToRoom(room, tilemap, wallTile, floorTile);
+                // AddExitWallsToRoom(room, tilemap, wallTile, floorTile);
             }
             else if (room.nextRoom == null) // Final room
             {
                 roomPrefabInstance = Instantiate(finalRoomPrefab, new Vector2(room.position.x * roomWidth, room.position.y * roomHeight), Quaternion.identity, transform);
                 room.SetInstance(roomPrefabInstance);
-                Tilemap tilemap = roomPrefabInstance.GetComponentInChildren<Tilemap>();
-                AddTilesToRoom(room, tilemap, wallTile, floorTile);
-                AddExitWallsToRoom(room, tilemap, wallTile, floorTile);
+                // Tilemap tilemap = roomPrefabInstance.GetComponentInChildren<Tilemap>();
+                // AddTilesToRoom(room, tilemap, wallTile, floorTile);
+                // AddExitWallsToRoom(room, tilemap, wallTile, floorTile);
             }
             else // Middle rooms
             {
                 roomPrefabInstance = Instantiate(roomPrefab, new Vector2(room.position.x * roomWidth, room.position.y * roomHeight), Quaternion.identity, transform);
                 roomPrefabInstance.GetComponent<MazeGenerator>().ActivateMaze(room, room.entryPoint, room.exitPoint);
                 room.SetInstance(roomPrefabInstance);
-                Tilemap tilemap = roomPrefabInstance.GetComponentInChildren<Tilemap>();
-                AddTilesToRoom(room, tilemap, wallTile, floorTile);
-                AddExitWallsToRoom(room, tilemap, wallTile, floorTile);
+                // Tilemap tilemap = roomPrefabInstance.GetComponentInChildren<Tilemap>();
+                // AddTilesToRoom(room, tilemap, wallTile, floorTile);
+                // AddExitWallsToRoom(room, tilemap, wallTile, floorTile);
             }
+            Tilemap tilemap = roomPrefabInstance.GetComponentInChildren<Tilemap>();
+            AddTilesToRoom(room, tilemap, wallTile, floorTile);
+            AddExitWallsToRoom(room, tilemap, wallTile, floorTile);
 
             
             Debug.Log(room);
@@ -189,9 +192,9 @@ public class RecursiveGenerator : MonoBehaviour
         int offsetY = -roomHeight / 2;
 
         // Add tiles to the tilemap based on the presence of walls/floors/ceilings
-        for (int x = 0; x <= roomWidth; x++)
+        for (int x = 0; x < roomWidth; x++)
         {
-            for (int y = 0; y <= roomHeight; y++)
+            for (int y = 0; y < roomHeight; y++)
             {
                 // Adjust the position with the offset
                 int tileX = x + offsetX;
@@ -230,9 +233,9 @@ public class RecursiveGenerator : MonoBehaviour
         int offsetY = -roomHeight / 2;
 
         // Add tiles to the tilemap based on the presence of walls/floors/ceilings
-        for (int x = 0; x <= roomWidth; x++)
+        for (int x = 0; x < roomWidth; x++)
         {
-            for (int y = 0; y <= roomHeight; y++)
+            for (int y = 0; y < roomHeight; y++)
             {
                 // Adjust the position with the offset
                 int tileX = x + offsetX;

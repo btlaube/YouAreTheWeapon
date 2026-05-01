@@ -8280,11 +8280,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rows: 5
-  cols: 9
+  cols: 10
   cellSize: 1
   roomSize: 3
-  roomHeight: 22
-  roomWidth: 40
+  roomHeight: 21
+  roomWidth: 41
   wallColor: {r: 0, g: 0, b: 0, a: 1}
   pathColor: {r: 1, g: 1, b: 1, a: 1}
   enterance: {x: 0, y: 0}
@@ -8298,6 +8298,7 @@ MonoBehaviour:
   lightPrefab: {fileID: 4445057689056373882, guid: 275db8bb3ab8b3e46b6c8b8861bfd7af, type: 3}
   enemyPrefab: {fileID: 4882531585088769823, guid: 58a4b9de65ed72b478cf24b9eb7654b2, type: 3}
   keyPrefab: {fileID: 1603886427355896462, guid: 629a137602338f64485492ff9c8eab80, type: 3}
+  turretPrefab: {fileID: 2226040336152238110, guid: ad51cf389e542ec4283dc2a4546f962b, type: 3}
 --- !u!1 &3588483641337640808
 GameObject:
   m_ObjectHideFlags: 0

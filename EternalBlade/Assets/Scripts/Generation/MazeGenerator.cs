@@ -36,6 +36,7 @@ public class MazeGenerator : MonoBehaviour
     public GameObject lightPrefab;
     public GameObject enemyPrefab;
     public GameObject keyPrefab;
+    public GameObject turretPrefab;
 
     public void DebugPath(Vector2Int start, Vector2Int target)
     {
@@ -60,16 +61,16 @@ public class MazeGenerator : MonoBehaviour
     {
         DrawExpandedGrid(room, mazeEntry, mazeExit);
         GenerateExpandedMaze();
-        StartCoroutine(PauseForShadows());
+        StartCoroutine(PauseForShadows(room));
         // SpawnLights();
     }
 
-    public IEnumerator PauseForShadows()
+    public IEnumerator PauseForShadows(Room room)
     {
         yield return new WaitForSeconds(0.1f);
 
         CreateShadowCasters();
-        PopulateMaze();
+        PopulateMaze(room);
     }
 
     void DrawExpandedGrid(Room room, Vector2Int mazeEntry, Vector2Int mazeExit)
@@ -82,22 +83,22 @@ public class MazeGenerator : MonoBehaviour
         int offsetX = -roomWidth / 2;
         int offsetY = -roomHeight / 2;
 
-        for (int x = 0; x < expandedCols + 3; x++) // -1 from expandedCols here removes last wall for uneven room size at right side of maze
+        for (int x = 0; x < expandedCols; x++) // -1 from expandedCols here removes last wall for uneven room size at right side of maze
         {
             for (int y = 0; y < expandedRows; y++)
             {
                 // Determine if the current tile is a wall or part of a path
                 if (x % 4 == 0 || y % 4 == 0)
                 {
-                    if (x < expandedCols - 1 || (y == expandedRows-1 || y == 0))
-                    {
+                    // if (x < expandedCols - 1 && y < expandedRows - 1)
+                    // {
                         // Walls are on every 4th row/column
                         // Apply the offset to align the platforms with the walls and floor
                         int tileX = x + offsetX;
                         int tileY = y + offsetY;
 
-                        wallTilemap.SetTile(new Vector3Int(tileX, tileY, 0), wallTile); // Place a path tile on the backgroun
-                    }
+                        wallTilemap.SetTile(new Vector3Int(tileX, tileY, 0), wallTile); // Place a path tile on the background
+                    // }
                 }
                 else
                 {
@@ -115,13 +116,26 @@ public class MazeGenerator : MonoBehaviour
         // AddExitWallsToRoom(mazeEntry, mazeExit);
     }
 
-    private void PopulateMaze()
+    private void PopulateMaze(Room room)
     {
+        
+        // Determine which walls, ceiling, and floor should have tiles
+        bool hasLeftEntry = room.entryPoint == new Vector2Int(-1, 0);
+        // bool hasRightEntry = mazeEntry == new Vector2Int(1, 0);  // No right entries
+        bool hasBottomEntry = room.entryPoint == new Vector2Int(0, -1);
+        bool hasTopEntry = room.entryPoint == new Vector2Int(0, 1);
+
+        // bool hasLeftExit= mazeExit == new Vector2Int(-1, 0);
+        bool hasRightExit = room.exitPoint == new Vector2Int(1, 0);
+        bool hasBottomExit = room.exitPoint == new Vector2Int(0, -1);
+        bool hasTopExit = room.exitPoint == new Vector2Int(0, 1);
+        // Offset to move the tiles to the bottom-left corner
+
         int expandedRows = rows * 3 + (rows + 1); // 3x3 paths + 1x1 walls
         int expandedCols = cols * 3 + (cols + 1); // 3x3 paths + 1x1 walls
 
         bool spawnedKey = false;
-        float enemyChance = 0.3f;
+        float enemyChance = (room.id - 1) * 0.1f;
         for (int x = 0; x < expandedCols - 1; x++) // -1 from expandedCols here removes last wall for uneven room size at right side of maze
         {
             for (int y = 0; y < expandedRows; y++)
@@ -129,23 +143,48 @@ public class MazeGenerator : MonoBehaviour
                 // Check if the current cell is the center of a room
                 if (x % 4 == 2 && y % 4 == 2)
                 {
+
+                    // if (hasLeftEntry)
+                    // {
+                    //     Debug.Log($"room {room.}")
+                    // }
+
                     // Check if this is a dead end
                     Vector2Int cell = new Vector2Int(x, y);
+                    
+                    // if (hasLeftEntry && cell.y == (room.entryPointOffset * 4) + 2) SpawnLight(cell);
+                    // else if (hasBottomEntry && cell.y == 2) SpawnLight(cell);
+                    // else if (hasTopEntry && cell.y == (expandedRows - 3)) SpawnLight(cell);
+
+                    // if (hasRightExit && cell.y == (room.exitPointOffset * 4) + 2) SpawnLight(cell);
+                    // else if (hasBottomExit && cell.x == (room.exitPointOffset * 4) + 2) SpawnLight(cell);
+                    // else if (hasTopExit && cell.x == (room.exitPointOffset * 4) + 2) SpawnLight(cell);
+
                     if (IsDeadEnd(cell)) // No lights on maze edge.
                     {
+                        SpawnLight(cell); // Spawn light at dead end
                         if (!spawnedKey)
                         {
                             SpawnObjectInRoom(keyPrefab, cell);
                             spawnedKey = true;
                         }
-                        else if (Random.Range(0f, 1f) <= enemyChance && !IsPathBetween(cell, new Vector2Int(cell.x, cell.y - 4)))
+                        if (Random.Range(0f, 1f) <= enemyChance && !IsPathBetween(cell, new Vector2Int(cell.x, cell.y - 4))) // Only spawn enemies that have a floor below them.
                         {
+                            if (hasLeftEntry && cell.y == (room.entryPointOffset * 4) + 2) continue; // Don't spawn enemy at entry
+                            else if (hasBottomEntry && cell.y == 2) continue;
+                            else if (hasTopEntry && cell.y == (expandedRows - 3)) continue;
                             SpawnEnemy(cell);
                         }
-                        else
+                        else if (Random.Range(0f, 1f) <= enemyChance && !IsPathBetween(cell, new Vector2Int(cell.x, cell.y - 4))) // Spawn turret with lower chance than enemies
                         {
-                            SpawnLight(cell); // Spawn light at dead end
+                            if (hasLeftEntry && cell.y == (room.entryPointOffset * 4) + 2) continue; // Don't spawn turret at entry
+                            else if (hasBottomEntry && cell.y == 2) continue;
+                            else if (hasTopEntry && cell.y == (expandedRows - 3)) continue;
+                            SpawnObjectInRoom(turretPrefab, cell);
                         }
+                        // else
+                        // {
+                        // }
                     }
                 }
             }
@@ -226,7 +265,7 @@ public class MazeGenerator : MonoBehaviour
                         wallTilemap.SetTile(new Vector3Int(tileX, tileY, 0), null);
                     }
                 }
-                // Bottom entry
+                // // Bottom entry
                 if (hasBottomEntry && y == 0)
                 {
                     if (x > (room.entryPointOffset * 4) && x < ((room.entryPointOffset * 4) + 4))
@@ -235,8 +274,8 @@ public class MazeGenerator : MonoBehaviour
                     }
                 }
 
-                // Top entry
-                if (hasTopEntry && y == roomHeight - 2)
+                // // Top entry
+                if (hasTopEntry && y == roomHeight - 1)
                 {
                     if (x > (room.entryPointOffset * 4) && x < ((room.entryPointOffset * 4) + 4))
                     {
@@ -253,7 +292,7 @@ public class MazeGenerator : MonoBehaviour
                     }
                 }
 
-                // Bottom exit
+                // // Bottom exit
                 if (hasBottomExit && y == 0)
                 {
                     if (x > (room.exitPointOffset * 4) && x < ((room.exitPointOffset * 4) + 4))
@@ -262,8 +301,8 @@ public class MazeGenerator : MonoBehaviour
                     }
                 }
 
-                // Top exit
-                if (hasTopExit && y == roomHeight - 2)
+                // // Top exit
+                if (hasTopExit && y == roomHeight - 1)
                 {
                     if (x > (room.exitPointOffset * 4) && x < ((room.exitPointOffset * 4) + 4))
                     {

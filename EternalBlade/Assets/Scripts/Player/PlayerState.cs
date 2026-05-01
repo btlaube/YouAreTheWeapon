@@ -70,12 +70,34 @@ public class FallingState : PlayerState
     {
         playerAnimator.SetBool("IsFalling", true);
         // Debug.Log("Enter Falling");
-        playerController.rb.gravityScale = playerController.regGravityScale;
+        // playerController.rb.gravityScale = playerController.regGravityScale;
+
+        if (playerController.rb.velocity.y > 0)
+        {
+            // Player released jump while rising
+            playerController.rb.gravityScale = playerController.shortHopGravityScale;
+        }
+        else
+        {
+            // Normal falling
+            playerController.rb.gravityScale = playerController.regGravityScale;
+        }
+
+        // playerController.rb.velocity = new Vector2(playerController.rb.velocity.x, 0f);
+        // playerController.SetYVelocity(0);
     }
 
     public override void Update()
     {
-        // Debug.Log("Falling");
+        Debug.Log("Falling");
+        playerController.CancelInputOnWall();
+        // Player has crossed into actual falling
+        if (playerController.rb.velocity.y <= 0)
+        {
+            playerController.rb.gravityScale = playerController.regGravityScale;
+        }
+        // float yVelocity = Mathf.MoveTowards(playerController.rb.velocity.y, 0, playerController.airAcceleration * Time.fixedDeltaTime);
+        // playerController.SetYVelocity(yVelocity);
     }
 
     public override void Exit()

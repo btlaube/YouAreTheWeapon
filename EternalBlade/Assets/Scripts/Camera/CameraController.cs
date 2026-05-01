@@ -10,6 +10,7 @@ public class CameraController : MonoBehaviour
 
     // ScreenShake
     private CameraShake screenShakeController;
+    public CameraFollow cameraFollowController;
 
     void Awake()
     {
@@ -76,7 +77,12 @@ public class CameraController : MonoBehaviour
             Vector3 newPosition = nearestPosition.position;
             newPosition.z = cameraComponent.transform.position.z; // Keep the original z value
             cameraComponent.transform.position = newPosition;
+
+            // Update camera follow boundss
+            UpdateCameraFollowBounds(newPosition.x, newPosition.y, newPosition.x + 1f, newPosition.y);
+
         }
+
     }
 
     public void ClearCameraPositions()
@@ -93,6 +99,10 @@ public class CameraController : MonoBehaviour
             // Add the transform of each object to the list
             cameraPositions.Add(obj.transform);
         }
+    }
+
+    private void UpdateCameraFollowBounds(float newMinX, float newMinY, float newMaxX, float newMaxY) {
+        cameraFollowController.UpdateCameraBounds(newMinX, newMinY, newMaxX, newMaxY);
     }
 
 }
