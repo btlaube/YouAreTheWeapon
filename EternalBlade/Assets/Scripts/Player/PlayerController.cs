@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     public Vector2 jump;
     public float jumpDurationThreshold;
     public float regGravityScale;
+    public float shortHopGravityScale;
     public float wallClingGravityScale;
     public int currentJumps;
     public int maxJumps;
@@ -150,7 +151,11 @@ public class PlayerController : MonoBehaviour
         // Smoothly apply horizontal movment to xVelocity towards the target velocity
         targetVelocityX = speed * input.x;
         float currentVelocityX = rb.velocity.x;
-        xVelocity = Mathf.MoveTowards(currentVelocityX, targetVelocityX, accelerationRate * Time.fixedDeltaTime);
+        xVelocity = Mathf.MoveTowards(currentVelocityX, targetVelocityX, acceleration * Time.fixedDeltaTime);
+
+        // if (shouldJump) targetVelocityY = jump.y;
+        // float currentVelocityY = rb.velocity.y;
+        // yVelocity = Mathf.MoveTowards(currentVelocityY, targetVelocityY, airAcceleration * Time.fixedDeltaTime);
 
         // Apply new x and y velocities
         rb.velocity = new Vector2(xVelocity, yVelocity);
@@ -172,7 +177,7 @@ public class PlayerController : MonoBehaviour
     public void FlipSprite(bool flip)
     {
         swordSr.flipX = flip;
-        wielderSr.flipX = flip;
+        // wielderSr.flipX = flip;
         // float multiplier = flip ? -1.0f : 1.0f;
         // transform.localScale = new Vector3(multiplier, 1.0f, 1.0f);
     }
@@ -256,6 +261,10 @@ public class PlayerController : MonoBehaviour
             {
                 SwitchState(new WallClingingState(this));
             }
+            if (PlayerHitCieling())
+            {
+                SwitchState(new FallingState(this));
+            }
         }
         else if (currentState is WallJumpingState)
         {
@@ -329,8 +338,10 @@ public class PlayerController : MonoBehaviour
 
     public void Jump()
     {
+        // shouldJump = false;
         // Jump physics
-        rb.velocity = new Vector2(rb.velocity.x, jump.y);
+        // rb.velocity = new Vector2(rb.velocity.x, jump.y);
+        targetVelocityY = jump.y;
 
         // Incremenet jump counter
         currentJumps++;
@@ -357,6 +368,7 @@ public class PlayerController : MonoBehaviour
         // Continue jump physics
         float jumpForce = Mathf.Lerp(jump.y, 0, jumpDuration / jumpDurationThreshold);
         rb.velocity = new Vector2(rb.velocity.x, Mathf.Max(rb.velocity.y, jumpForce));
+        // Debug.Log("Jumping, y input: " + input.z + ", rb.velocity.y: " + rb.velocity.y + ", jumpForce: " + jumpForce);
         
         // Increment jump timer
         IncrementJumpDuration();
@@ -380,7 +392,7 @@ public class PlayerController : MonoBehaviour
     {
         ResetJumpDuration();
         shouldJump = false;
-        SetTargetYVelocity(0.0f);
+        // SetTargetYVelocity(-9.81f);
     }
 
     public void CancelInputOnWall()
@@ -390,11 +402,13 @@ public class PlayerController : MonoBehaviour
         {
             if (input.x < 0.0f)
                 input.x = 0.0f;
+            Debug.Log("Canceling input on wall, wall direction: " + wallDirection + ", input.x: " + input.x);
         }
         else if (wallDirection == 1)
         {
             if (input.x > 0.0f)
                 input.x = 0.0f;
+            Debug.Log("Canceling input on wall, wall direction: " + wallDirection + ", input.x: " + input.x);
         }
     }
 
@@ -455,12 +469,27 @@ public class PlayerController : MonoBehaviour
         return groundCheck1 || groundCheck2 || groundCheck3;
     }
 
+    public bool PlayerHitCieling()
+    {
+        bool ceilingCheck1 = Physics2D.Raycast(new Vector2(transform.position.x + widthOffset, transform.position.y + playerHeight + heightOffset), Vector2.up, rayCastLengthCheck, groundLayer);
+        bool ceilingCheck2 = Physics2D.Raycast(new Vector2(transform.position.x + (playerWidth - groundCheckEdgeOffset ) + widthOffset, transform.position.y + playerHeight + heightOffset), Vector2.up, rayCastLengthCheck, groundLayer);
+        bool ceilingCheck3 = Physics2D.Raycast(new Vector2(transform.position.x - (playerWidth - groundCheckEdgeOffset ) + widthOffset, transform.position.y + playerHeight + heightOffset), Vector2.up, rayCastLengthCheck, groundLayer);
+
+        return ceilingCheck1 || ceilingCheck2 || ceilingCheck3;
+    }
+
     public bool PlayerIsOnWall()
     {
-        bool wallOnleft = Physics2D.Raycast(new Vector2(transform.position.x - playerWidth + widthOffset, transform.position.y + heightOffset), -Vector2.right, rayCastLengthCheck, groundWallLayer);
-        bool wallOnRight = Physics2D.Raycast(new Vector2(transform.position.x + playerWidth + widthOffset, transform.position.y + heightOffset), Vector2.right, rayCastLengthCheck, groundWallLayer);
+        bool isWallLeft1 = Physics2D.Raycast(new Vector2(transform.position.x - playerWidth + widthOffset, transform.position.y + heightOffset), -Vector2.right, rayCastLengthCheck, groundWallLayer);
+        // bool isWallLeft2 = Physics2D.Raycast(new Vector2(transform.position.x - playerWidth + widthOffset, transform.position.y + (playerHeight - groundCheckEdgeOffset) + heightOffset), -Vector2.right, rayCastLengthCheck, groundWallLayer);
+        // bool isWallLeft3 = Physics2D.Raycast(new Vector2(transform.position.x - playerWidth + widthOffset, transform.position.y - (playerHeight - groundCheckEdgeOffset) + heightOffset), -Vector2.right, rayCastLengthCheck, groundWallLayer);
 
-        return wallOnleft || wallOnRight;
+        bool isWallRight1 = Physics2D.Raycast(new Vector2(transform.position.x + playerWidth + widthOffset, transform.position.y + heightOffset), Vector2.right, rayCastLengthCheck, groundWallLayer);
+        // bool isWallRight2 = Physics2D.Raycast(new Vector2(transform.position.x + playerWidth + widthOffset, transform.position.y + (playerHeight - groundCheckEdgeOffset) + heightOffset), Vector2.right, rayCastLengthCheck, groundWallLayer);
+        // bool isWallRight3 = Physics2D.Raycast(new Vector2(transform.position.x + playerWidth + widthOffset, transform.position.y - (playerHeight - groundCheckEdgeOffset) + heightOffset), Vector2.right, rayCastLengthCheck, groundWallLayer);
+
+        // return isWallLeft1 || isWallLeft2 || isWallLeft3 || isWallRight1 || isWallRight2 || isWallRight3;
+        return isWallLeft1 || isWallRight1;
     }
 
     public int GetWallDirection()
@@ -509,26 +538,38 @@ public class PlayerController : MonoBehaviour
         Gizmos.DrawLine(new Vector2(transform.position.x - (playerWidth - groundCheckEdgeOffset ) + widthOffset, transform.position.y - playerHeight + heightOffset),
                         new Vector2(transform.position.x - (playerWidth - groundCheckEdgeOffset ) + widthOffset, transform.position.y - playerHeight + heightOffset - rayCastLengthCheck));
 
+        // Draw raycasts for ceiling check
+        Gizmos.color = Color.green;
+        // Ceiling check 1
+        Gizmos.DrawLine(new Vector2(transform.position.x + widthOffset, transform.position.y + playerHeight + heightOffset),
+                        new Vector2(transform.position.x + widthOffset, transform.position.y + playerHeight + heightOffset + rayCastLengthCheck));
+        // Ceiling check 2
+        Gizmos.DrawLine(new Vector2(transform.position.x + (playerWidth - groundCheckEdgeOffset ) + widthOffset, transform.position.y + playerHeight + heightOffset),
+                        new Vector2(transform.position.x + (playerWidth - groundCheckEdgeOffset ) + widthOffset, transform.position.y + playerHeight + heightOffset + rayCastLengthCheck));
+        // Ceiling check 3
+        Gizmos.DrawLine(new Vector2(transform.position.x - (playerWidth - groundCheckEdgeOffset ) + widthOffset, transform.position.y + playerHeight + heightOffset),
+                        new Vector2(transform.position.x - (playerWidth - groundCheckEdgeOffset ) + widthOffset, transform.position.y + playerHeight + heightOffset + rayCastLengthCheck));
+                        
         // Draw raycasts for wall check
         Gizmos.color = Color.blue;
         // Left wall 1
         Gizmos.DrawLine(new Vector2(transform.position.x - playerWidth + widthOffset, transform.position.y + heightOffset),
                         new Vector2(transform.position.x - playerWidth + widthOffset - rayCastLengthCheck, transform.position.y + heightOffset));
         // Left wall 2
-        Gizmos.DrawLine(new Vector2(transform.position.x - playerWidth + widthOffset, transform.position.y + (playerHeight - groundCheckEdgeOffset) + heightOffset),
-                        new Vector2(transform.position.x - playerWidth + widthOffset - rayCastLengthCheck, transform.position.y + (playerHeight - groundCheckEdgeOffset) + heightOffset));
+        // Gizmos.DrawLine(new Vector2(transform.position.x - playerWidth + widthOffset, transform.position.y + (playerHeight - groundCheckEdgeOffset) + heightOffset),
+                        // new Vector2(transform.position.x - playerWidth + widthOffset - rayCastLengthCheck, transform.position.y + (playerHeight - groundCheckEdgeOffset) + heightOffset));
         // Left wall 3
-        Gizmos.DrawLine(new Vector2(transform.position.x - playerWidth + widthOffset, transform.position.y - (playerHeight - groundCheckEdgeOffset) + heightOffset),
-                        new Vector2(transform.position.x - playerWidth + widthOffset - rayCastLengthCheck, transform.position.y - (playerHeight - groundCheckEdgeOffset) + heightOffset));
+        // Gizmos.DrawLine(new Vector2(transform.position.x - playerWidth + widthOffset, transform.position.y - (playerHeight - groundCheckEdgeOffset) + heightOffset),
+                        // new Vector2(transform.position.x - playerWidth + widthOffset - rayCastLengthCheck, transform.position.y - (playerHeight - groundCheckEdgeOffset) + heightOffset));
         
         // Right wall 1
         Gizmos.DrawLine(new Vector2(transform.position.x + playerWidth + widthOffset, transform.position.y + heightOffset),
                         new Vector2(transform.position.x + playerWidth + widthOffset + rayCastLengthCheck, transform.position.y + heightOffset));
         // Right wall 2
-        Gizmos.DrawLine(new Vector2(transform.position.x + playerWidth + widthOffset, transform.position.y + (playerHeight - groundCheckEdgeOffset) + heightOffset),
-                        new Vector2(transform.position.x + playerWidth + widthOffset + rayCastLengthCheck, transform.position.y + (playerHeight - groundCheckEdgeOffset) + heightOffset));
+        // Gizmos.DrawLine(new Vector2(transform.position.x + playerWidth + widthOffset, transform.position.y + (playerHeight - groundCheckEdgeOffset) + heightOffset),
+                        // new Vector2(transform.position.x + playerWidth + widthOffset + rayCastLengthCheck, transform.position.y + (playerHeight - groundCheckEdgeOffset) + heightOffset));
         // Right wall 3
-        Gizmos.DrawLine(new Vector2(transform.position.x + playerWidth + widthOffset, transform.position.y - (playerHeight - groundCheckEdgeOffset) + heightOffset),
-                        new Vector2(transform.position.x + playerWidth + widthOffset + rayCastLengthCheck, transform.position.y - (playerHeight - groundCheckEdgeOffset) + heightOffset));
+        // Gizmos.DrawLine(new Vector2(transform.position.x + playerWidth + widthOffset, transform.position.y - (playerHeight - groundCheckEdgeOffset) + heightOffset),
+                        // new Vector2(transform.position.x + playerWidth + widthOffset + rayCastLengthCheck, transform.position.y - (playerHeight - groundCheckEdgeOffset) + heightOffset));
     }
 }

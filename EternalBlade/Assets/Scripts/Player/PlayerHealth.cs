@@ -59,7 +59,7 @@ public class PlayerHealth : MonoBehaviour
         {
             Debug.Log("Heal sword!");
             audioHandler.Play("Heal Sword");
-            audioHandler.Play("Damaged");
+            // audioHandler.Play("Damaged");
             GainSwordHealth(1f);
             TakeWielderDamage(1f);
         }
@@ -78,9 +78,21 @@ public class PlayerHealth : MonoBehaviour
 
     public void FullDamageWielder()
     {
-        TakeWielderDamage(wielderCurrentHealth);
+        // TakeWielderDamage(wielderCurrentHealth);
+        StartCoroutine(DamageWielderOverTime(wielderCurrentHealth, 0.5f));
     }
     
+    public IEnumerator DamageWielderOverTime(float damageAmount, float duration)
+    {
+        float amountDamaged = 0f;
+        while (amountDamaged <= damageAmount)
+        {
+            TakeWielderDamage(1f);
+            amountDamaged += 1f;
+            yield return new WaitForSeconds(duration);
+        }
+    }
+
     public void SaveSwordHealth()
     {
         PlayerPrefs.SetInt("SwordStartingHealth", (int)swordCurrentHealth);
@@ -134,6 +146,7 @@ public class PlayerHealth : MonoBehaviour
         if (wielderCurrentHealth > 0)
         {
             // Take wielder damage without dying
+            audioHandler.Play("Damage Wielder");
         }
         else
         {
