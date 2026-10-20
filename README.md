@@ -1,4 +1,5 @@
-# Eternal Blade: You Are The Weapon
+![Title Card](/docs/images/ItchTitle.png)
+## You Are The Weapon
 
 **[Play on itch.io](https://bifrostgames.itch.io/eternal-blade)** | **[Game Design Doc](https://docs.google.com/document/d/1zjTeOjho5ybUgabLkFJdvdTrM4i8631OWLiW3k0VPKc/edit?usp=sharing)**
 
@@ -7,6 +8,9 @@
 **Sacrifice the wielder to save the blade.**
 
 You aren't the hero, you are the sword. Explore an infinite, procedurally generated dungeon as a blade passed from wielder to wielder. Every wielder is expendable, and you'll need to spend them wisely.
+
+<!-- <img src="./docs/images/AnimCover.gif" alt="Animated Cover" width="630" height="300"> -->
+![Anim Cover](/docs/images/AnimCover.gif)
 
 > It's a bug! It's a feature! Try attacking enemies through walls or ceilings...
 
@@ -34,6 +38,14 @@ You aren't the hero, you are the sword. Explore an infinite, procedurally genera
 ---
 
 ## Screenshots
+
+<div style="display: flex; gap: 10px;">
+  <div><img src="/docs/images/11.png" alt="Screenshot 1" width="640"></div>
+  <div><img src="/docs/images/12.png" alt="Screenshot 2" width="640"></div>
+  <div><img src="/docs/images/13.png" alt="Screenshot 3" width="640"></div>
+  <div><img src="/docs/images/14.png" alt="Screenshot 4" width="640"></div>
+  <div><img src="/docs/images/15.png" alt="Screenshot 5" width="640"></div>
+</div>
 
 ---
 
