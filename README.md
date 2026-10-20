@@ -9,8 +9,8 @@
 
 You aren't the hero, you are the sword. Explore an infinite, procedurally generated dungeon as a blade passed from wielder to wielder. Every wielder is expendable, and you'll need to spend them wisely.
 
-<!-- <img src="./docs/images/AnimCover.gif" alt="Animated Cover" width="630" height="300"> -->
-![Anim Cover](/docs/images/AnimCover.gif)
+<img src="./docs/images/AnimCover.gif" alt="Animated Cover" width="315" height="250">
+<!-- ![Anim Cover](/docs/images/AnimCover.gif) -->
 
 > It's a bug! It's a feature! Try attacking enemies through walls or ceilings...
 
